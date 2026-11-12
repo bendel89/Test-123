@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Street Style Lab — photographie de rue mode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   STREET STYLE LAB — palette urbaine / mode
+============================================================ */
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#d4d4d6;
+  --bg2:#f0f0f2;
+  --bg3:#e0e0e2;
+  --line:#b0b0b4;
+  --line2:#8a8a90;
+  --ink:#111114;
+  --ink2:#4a4a52;
+  --ink3:#76767e;
+  --navy:#1a1a1e;
+  --navy2:#2a2a30;
+  --pill:#e84a8a;
+  --pill2:#f07aa8;
+
+  --gold:#e84a8a;
+  --gold-dim:rgba(232,74,138,.10);
+  --cyan:#1aa6a6;
+  --cyan-dim:rgba(26,166,166,.10);
+  --green:#14946a;
+  --green-dim:rgba(20,148,106,.11);
+  --red:#d9473d;
+  --red-dim:rgba(217,71,61,.10);
+  --orange:#ff6a2b;
+
+  --radius:22px;
+  --radius-sm:14px;
+  --sans:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font:14px/1.55 var(--sans);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 60% 50% at 85% -5%,rgba(255,255,255,.6),transparent 62%),
+    radial-gradient(ellipse 50% 45% at -5% 100%,rgba(232,74,138,.15),transparent 60%),
+    linear-gradient(180deg,#dedee2 0%,#c8c8cc 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;mix-blend-mode:multiply;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .06  0 0 0 0 .06  0 0 0 0 .08  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(rgba(17,17,20,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(17,17,20,.04) 1px,transparent 1px);
+  background-size:180px 180px,96px 96px,96px 96px;
+}
+body::after{
+  content:"";position:fixed;right:-12vw;bottom:-18vw;width:60vw;height:60vw;pointer-events:none;z-index:0;border-radius:50%;
+  background:repeating-radial-gradient(circle at 50% 50%,transparent 0 38px,rgba(17,17,20,.06) 38px 39px);
+  -webkit-mask-image:radial-gradient(circle,#000 20%,transparent 70%);
+  mask-image:radial-gradient(circle,#000 20%,transparent 70%);
+}
+::selection{background:var(--navy);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#c8c8cc}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:99px;border:2px solid #c8c8cc}
+::-webkit-scrollbar-thumb:hover{background:var(--navy2)}
+
+.hidden{display:none!important}
+#main,#loginBox{position:relative;z-index:3}
+
+#hud{position:fixed;inset:0;pointer-events:none;z-index:45}
+#hud .c{position:absolute;width:22px;height:22px;border:0 solid var(--navy);opacity:.55}
+#hud .tl{top:70px;left:12px;border-top-width:1.5px;border-left-width:1.5px}
+#hud .tr{top:70px;right:12px;border-top-width:1.5px;border-right-width:1.5px}
+#hud .bl{bottom:64px;left:12px;border-bottom-width:1.5px;border-left-width:1.5px}
+#hud .br{bottom:64px;right:12px;border-bottom-width:1.5px;border-right-width:1.5px}
+#hud .coord{position:absolute;right:42px;top:76px;font:500 9px var(--mono);letter-spacing:.26em;color:var(--ink3);text-transform:uppercase}
+#hud .coord b{color:var(--orange);font-weight:700}
+#hud .rail{position:absolute;left:16px;top:50%;width:1px;height:96px;background:linear-gradient(transparent,var(--navy),transparent);opacity:.4;transform:translateY(-50%)}
+@media(max-width:860px){#hud .coord,#hud .rail{display:none}}
+
+#topbar{
+  position:fixed;top:0;left:0;right:0;height:60px;padding:0 1.4rem;
+  display:flex;align-items:center;gap:.9rem;z-index:50;
+  background:rgba(224,224,228,.74);
+  backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);
+  border-bottom:1px solid var(--line);
+  font:500 11px var(--mono);
+}
+#topbar::after{
+  content:"";position:absolute;left:0;bottom:-1px;height:2px;width:100%;
+  background:linear-gradient(90deg,var(--navy) 0,var(--pill) 40%,var(--orange) 78%,var(--navy) 100%);
+  background-size:300% 100%;animation:flow 10s linear infinite;opacity:.9;
+}
+@keyframes flow{to{background-position:300% 0}}
+.brand{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
+.brand svg{width:32px;height:32px;display:block}
+.brand b{font:800 1rem var(--sans);letter-spacing:-.01em;color:var(--navy);text-transform:uppercase}
+.brand b i{font-style:normal;color:var(--pill)}
+.brand small{display:block;font:500 8.5px var(--mono);letter-spacing:.24em;color:var(--ink3);margin-top:-2px}
+#modeTag{
+  padding:.32rem .85rem;border-radius:99px;background:rgba(17,17,20,.07);
+  border:1px solid var(--line);color:var(--ink3);
+  font:700 10px var(--mono);letter-spacing:.14em;white-space:nowrap;
+}
+#modeTag.live{background:var(--navy);border-color:var(--navy);color:#fff}
+#modeTag.live::before{content:"";display:inline-block;width:6px;height:6px;margin-right:.5rem;background:#42e8a4;border-radius:50%;box-shadow:0 0 10px #42e8a4;animation:pulse 1.6s ease-in-out infinite;vertical-align:middle}
+@keyframes pulse{50%{opacity:.3;transform:scale(.6)}}
+#globalStat{color:var(--ink2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;letter-spacing:.04em}
+#globalStat b{color:var(--navy)}
+@media(max-width:640px){.brand small{display:none}#globalStat{display:none}}
+
+#main{max-width:1280px;margin:0 auto;padding:5.2rem 1.4rem 140px}
+
+h1{font:800 2.4rem var(--sans);letter-spacing:-.045em;color:var(--navy);text-transform:uppercase;line-height:.95}
+h2{font:800 1.65rem var(--sans);letter-spacing:-.035em;color:var(--navy);margin:.3rem 0 .5rem;display:flex;align-items:center;gap:.6rem}
+h2::before{content:"";width:.5em;height:.5em;border-radius:50%;background:var(--pill);box-shadow:0 0 0 4px rgba(232,74,138,.28);flex-shrink:0}
+.sub{color:var(--ink2);font-size:.9rem;margin-bottom:1.2rem;max-width:62ch}
+
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:end;gap:1rem;margin-bottom:1.4rem;min-height:300px}
+.hero-copy{position:relative;z-index:2;padding-bottom:.4rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.6rem;font:700 10px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ink3);margin-bottom:.9rem}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--navy)}
+.hero h1{font:900 clamp(3.6rem,11vw,9rem)/.82 var(--sans);letter-spacing:-.062em;color:var(--navy);margin-bottom:1.1rem}
+.hero h1 em{font-style:normal;display:inline-flex;align-items:center;gap:.25em;vertical-align:middle}
+.hero h1 .out{color:transparent;-webkit-text-stroke:2px var(--navy)}
+.chip-people{display:inline-flex;align-items:center;gap:.55rem;padding:.35rem .9rem .35rem .4rem;border-radius:99px;background:rgba(240,240,242,.92);border:1px solid var(--line);box-shadow:0 8px 24px -10px rgba(17,17,20,.4);font:600 11px var(--mono);letter-spacing:0;color:var(--ink);text-transform:none;transform:translateY(-.4em)}
+.chip-people .av{display:flex}
+.chip-people .av i{width:26px;height:26px;border-radius:50%;border:2px solid #f0f0f2;margin-left:-8px;background:radial-gradient(circle at 35% 30%,#fff,#e84a8a 60%,#1a1a1e)}
+.chip-people .av i:first-child{margin-left:0}
+.chip-people .av i:nth-child(2){background:radial-gradient(circle at 35% 30%,#fff,#f07aa8 60%,#b03a68)}
+.chip-people small{display:block;font-size:9px;color:var(--ink3)}
+.hero-pills{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.2rem}
+.pill-tag{padding:.38rem .85rem;border-radius:99px;background:var(--pill);color:#fff;font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.pill-tag.ghost{background:transparent;border:1px solid var(--navy);color:var(--navy)}
+.hero-art{position:relative;z-index:1;align-self:stretch;display:flex;align-items:flex-end;justify-content:flex-end;min-height:260px}
+.hero-art svg{width:min(100%,430px);height:auto;display:block;margin-bottom:-1.4rem;filter:drop-shadow(0 30px 40px rgba(17,17,20,.28))}
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;min-height:0}
+  .hero-art{position:absolute;right:-6%;top:-1rem;width:52%;min-height:0;opacity:.9}
+  .hero-art svg{margin:0}
+}
+
+.tabs{
+  display:flex;gap:0;margin-bottom:1.5rem;flex-wrap:wrap;counter-reset:t;
+  background:linear-gradient(180deg,var(--navy2),var(--navy));
+  border-radius:16px;padding:5px;border:1px solid #3a3a42;
+  box-shadow:0 18px 40px -22px rgba(17,17,20,.8),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.tab{
+  flex:1;min-width:max-content;padding:.8rem 1.1rem;border-radius:11px;border:none;background:transparent;
+  color:#a8a8b2;cursor:pointer;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  transition:.2s;position:relative;
+}
+.tab::before{counter-increment:t;content:"0" counter(t);font:500 9px var(--mono);opacity:.5;margin-right:.55rem}
+.tab + .tab::after{content:"";position:absolute;left:0;top:28%;bottom:28%;width:1px;background:rgba(255,255,255,.14)}
+.tab:hover{color:#fff;background:rgba(255,255,255,.07)}
+.tab.active{background:var(--pill2);color:var(--navy);box-shadow:0 6px 18px -6px rgba(0,0,0,.5)}
+.tab.active::after,.tab.active + .tab::after{display:none}
+@media(max-width:700px){.tab{flex:1 1 45%;font-size:10px;padding:.7rem .6rem}}
+
+.card{
+  position:relative;background:rgba(244,244,246,.86);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(138,138,144,.55);border-radius:var(--radius);
+  padding:1.5rem;margin-bottom:1rem;
+  box-shadow:0 1px 0 #fff inset,0 24px 60px -28px rgba(17,17,20,.45);
+}
+.card::after{content:"+";position:absolute;top:.85rem;right:1.15rem;font:500 15px var(--mono);color:var(--ink3)}
+.card-head{
+  display:flex;align-items:center;gap:.7rem;margin:-.2rem 0 .6rem;padding-bottom:.8rem;border-bottom:1px dashed var(--line2);
+  font:700 10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);
+}
+.card-head b{color:var(--navy);font-weight:700}
+.card-head i{width:8px;height:8px;border-radius:50%;background:var(--orange);display:block}
+
+label.lab{
+  display:flex;align-items:center;gap:.5rem;
+  font:700 10px var(--mono);color:var(--ink2);text-transform:uppercase;letter-spacing:.18em;margin:1rem 0 .45rem;
+}
+label.lab::before{content:"";width:6px;height:6px;background:var(--pill);border-radius:2px;flex-shrink:0}
+input[type=text],input[type=password],input[type=number],textarea,select{
+  width:100%;background:#f8f8fa;border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:.75rem 1rem;font:500 13.5px var(--sans);color:var(--ink);outline:none;transition:.18s;min-height:46px;
+  box-shadow:inset 0 1px 2px rgba(17,17,20,.05);
+}
+textarea{min-height:92px;line-height:1.6;resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--ink3)}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(232,74,138,.14)}
+select{
+  appearance:none;-webkit-appearance:none;padding-right:2.6rem;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M2 5l5 5 5-5' fill='none' stroke='%23111114' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 1rem center;
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.hint-line{margin-top:.4rem;font:500 10.5px var(--mono);color:var(--ink3);letter-spacing:.02em;line-height:1.5}
+.hint-line b{color:var(--gold);font-weight:700}
+
+input[type=checkbox]{
+  appearance:none;-webkit-appearance:none;width:42px!important;height:25px!important;min-height:25px!important;
+  border-radius:99px;background:var(--line);position:relative;cursor:pointer;flex-shrink:0;transition:.25s;
+  border:none;padding:0;box-shadow:inset 0 1px 3px rgba(17,17,20,.25);
+}
+input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(17,17,20,.35);transition:.25s}
+input[type=checkbox]:checked{background:var(--navy)}
+input[type=checkbox]:checked::after{transform:translateX(17px);background:var(--pill2)}
+input[type=checkbox]:focus-visible{outline:3px solid rgba(232,74,138,.35);outline-offset:2px}
+
+.chk-row{
+  display:flex;align-items:center;gap:.8rem;margin-top:1rem;padding:.8rem 1rem;
+  background:#f8f8fa;border:1px solid var(--line);border-radius:var(--radius-sm);cursor:pointer;transition:.18s;
+}
+.chk-row:hover{border-color:var(--gold);background:#fff}
+.chk-row label{font:700 .8rem var(--sans);color:var(--navy);cursor:pointer;letter-spacing:.01em}
+.chk-row .hint{font:500 10.5px var(--mono);color:var(--ink3);flex:1;text-align:right}
+@media(max-width:520px){.chk-row{flex-wrap:wrap}.chk-row .hint{text-align:left;flex-basis:100%}}
+
+.btn{
+  min-height:44px;padding:.6rem 1.3rem;border-radius:99px;
+  font:700 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid;
+  transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-gold{background:var(--pill);border-color:var(--pill);color:#fff}
+.btn-gold:hover:not(:disabled){background:var(--navy);border-color:var(--navy);color:#fff;transform:translateY(-1px)}
+.btn-cyan{background:transparent;border-color:var(--navy);color:var(--navy)}
+.btn-cyan:hover:not(:disabled){background:var(--navy);color:#fff}
+.btn-red{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.btn-red:hover:not(:disabled){background:var(--red);color:#fff}
+.btn-slate{background:rgba(17,17,20,.06);border-color:var(--line);color:var(--ink2);font-size:.64rem}
+.btn-slate:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+
+.btn-mega{
+  position:relative;width:100%;min-height:62px;margin-top:1.3rem;padding:.7rem 4.2rem .7rem 1.8rem;
+  background:linear-gradient(180deg,var(--navy2),var(--navy));border:1px solid #3a3a42;color:#fff;border-radius:99px;
+  font:800 .95rem var(--sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  display:flex;align-items:center;justify-content:flex-start;
+  box-shadow:0 18px 36px -16px rgba(17,17,20,.8),inset 0 1px 0 rgba(255,255,255,.15);
+  transition:.25s;overflow:hidden;
+}
+.btn-mega::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-120%)}
+.btn-mega:hover:not(:disabled)::before{transform:translateX(120%);transition:transform .8s}
+.btn-mega::after{content:"→";position:absolute;right:8px;top:8px;bottom:8px;aspect-ratio:1;border-radius:50%;background:var(--pill);color:#fff;display:grid;place-items:center;font:700 1.25rem var(--sans);transition:.3s}
+.btn-mega:hover:not(:disabled)::after{transform:rotate(-45deg);background:var(--pill2)}
+.btn-mega:hover:not(:disabled){transform:translateY(-2px)}
+.btn-mega:disabled{opacity:.6;cursor:not-allowed}
+
+.btn-mini{
+  background:#f8f8fa;border:1px solid var(--line);color:var(--ink2);
+  font:700 .6rem var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:.45rem .9rem;border-radius:99px;
+  cursor:pointer;transition:.18s;min-height:0;
+}
+.btn-mini:hover:not(:disabled),.btn-mini.active{color:#fff;border-color:var(--navy);background:var(--navy)}
+.btn-mini:disabled{opacity:.4;cursor:not-allowed}
+.btn-mini.btn-red{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.btn-mini.btn-red:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+.pipeline-ctrl{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.pipeline-ctrl .btn{flex:1;min-width:120px}
+
+.drop{
+  position:relative;border:1.5px dashed var(--line2);border-radius:18px;padding:1.5rem;text-align:center;cursor:pointer;
+  background:repeating-linear-gradient(45deg,transparent 0 11px,rgba(17,17,20,.025) 11px 12px),#f8f8fa;
+  transition:.2s;
+}
+.drop:hover{border-color:var(--gold);background-color:#fff;transform:translateY(-1px)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%!important;height:100%!important;min-height:0!important}
+.drop .icon{width:54px;height:54px;margin:0 auto .5rem;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;background:radial-gradient(circle at 35% 30%,#fff,var(--pill2) 60%,var(--pill));box-shadow:0 10px 22px -10px rgba(17,17,20,.5)}
+.drop .txt{font:600 11px var(--mono);letter-spacing:.06em;color:var(--ink2)}
+.preview{margin-top:.8rem;position:relative;display:inline-block;max-width:230px}
+.preview img{max-width:100%;border-radius:16px;border:1px solid var(--line);display:block;box-shadow:0 14px 32px -14px rgba(17,17,20,.55)}
+.preview .rm{position:absolute;top:8px;right:8px;background:var(--navy);color:#fff;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:.7rem;display:grid;place-items:center;transition:.2s}
+.preview .rm:hover{background:var(--red);transform:rotate(90deg)}
+
+.status{font:500 11.5px/1.5 var(--mono);padding:.65rem .95rem;border-radius:12px;background:var(--bg3);color:var(--ink2);border-left:3px solid var(--line2);word-break:break-word;margin-top:.55rem}
+.status.ok{background:var(--green-dim);color:var(--green);border-left-color:var(--green)}
+.status.err{background:var(--red-dim);color:var(--red);border-left-color:var(--red)}
+.status.warn{background:rgba(255,106,43,.11);color:#bd4a12;border-left-color:var(--orange)}
+
+.step{display:flex;align-items:flex-start;gap:.7rem;padding:.8rem 1rem;background:rgba(248,248,250,.92);border:1px solid var(--line);border-radius:14px;margin-bottom:.5rem;font:500 .76rem var(--mono);animation:rise .35s ease both}
+.step .ico{flex-shrink:0;font-size:1.05rem}
+.step .msg{flex:1;color:var(--ink2)}
+.step.running{border-color:var(--pill)}
+.step.running .msg{color:var(--gold)}
+.step.done{border-left:4px solid var(--green)}
+.step.error{border-left:4px solid var(--red);background:var(--red-dim)}
+.step.error .msg{color:var(--red)}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(232,74,138,.22);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+
+#tab-create{display:grid;grid-template-columns:minmax(330px,440px) minmax(0,1fr);gap:1.4rem;align-items:start}
+#tab-create>.card{grid-column:1;grid-row:1 / span 8;margin-bottom:0}
+#stepsBox,#resultsBox,#emptyCanvas{grid-column:2}
+#stepsBox{margin-top:0!important}
+@media(max-width:1020px){
+  #tab-create{grid-template-columns:1fr}
+  #tab-create>.card,#stepsBox,#resultsBox,#emptyCanvas{grid-column:1;grid-row:auto}
+}
+#emptyCanvas{
+  display:none;position:relative;min-height:520px;border-radius:var(--radius);padding:2rem;
+  border:1.5px dashed var(--line2);text-align:center;overflow:hidden;
+  background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,transparent 0 31px,rgba(17,17,20,.04) 31px 32px),repeating-linear-gradient(90deg,transparent 0 31px,rgba(17,17,20,.04) 31px 32px);
+}
+#resultsBox.hidden + #emptyCanvas{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem}
+#emptyCanvas svg{width:210px;height:210px;filter:drop-shadow(0 26px 30px rgba(17,17,20,.3));animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+#emptyCanvas h3{font:800 1.6rem var(--sans);letter-spacing:-.035em;color:var(--navy);text-transform:uppercase;margin-top:.8rem}
+#emptyCanvas p{font:500 11.5px var(--mono);color:var(--ink3);max-width:38ch;letter-spacing:.03em}
+#emptyCanvas .corner{position:absolute;width:18px;height:18px;border:0 solid var(--navy);opacity:.5}
+#emptyCanvas .c1{top:14px;left:14px;border-top-width:1.5px;border-left-width:1.5px}
+#emptyCanvas .c2{top:14px;right:14px;border-top-width:1.5px;border-right-width:1.5px}
+#emptyCanvas .c3{bottom:14px;left:14px;border-bottom-width:1.5px;border-left-width:1.5px}
+#emptyCanvas .c4{bottom:14px;right:14px;border-bottom-width:1.5px;border-right-width:1.5px}
+
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.1rem;margin-top:1rem}
+
+.img-card{position:relative;display:flex;flex-direction:column;overflow:hidden;background:rgba(248,248,250,.94);border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 0 #fff inset,0 18px 40px -26px rgba(17,17,20,.6);transition:.28s;animation:rise .45s ease both}
+.img-card:hover{transform:translateY(-4px);box-shadow:0 28px 54px -26px rgba(17,17,20,.7);border-color:var(--pill)}
+.img-card .img-wrap{padding:.55rem;position:relative}
+.img-card img{width:100%;display:block;border-radius:14px;background:var(--bg3)}
+.img-card .img-wrap .old{opacity:.5;margin-bottom:.5rem;border:1px solid var(--red);position:relative}
+.img-card .img-wrap .old::after{content:'ancienne';position:absolute;top:4px;right:4px;background:var(--red);color:#fff;font:700 .6rem var(--mono);padding:.15rem .5rem;border-radius:99px}
+.img-card .img-wrap .new{border:2px solid var(--green)}
+.img-card .fav-btn{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:rgba(248,248,250,.92);color:var(--ink3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;z-index:2;transition:.2s;box-shadow:0 6px 16px -4px rgba(17,17,20,.5);backdrop-filter:blur(6px)}
+.img-card .fav-btn:hover:not(:disabled){color:var(--orange);transform:scale(1.12)}
+.img-card .fav-btn:disabled{opacity:.5;cursor:wait}
+.img-card .fav-btn.active{background:var(--orange);color:#fff}
+.img-card .info{padding:.7rem .85rem .85rem;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:.5rem}
+.img-card .info .meta,.img-card>.meta{font:700 9.5px var(--mono);color:var(--gold);text-transform:uppercase;letter-spacing:.14em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.img-card>.meta{padding:.7rem .9rem 0}
+.img-card .info textarea,.img-card>textarea{min-height:74px;font:500 10.5px/1.55 var(--mono);margin:0;border-radius:12px;padding:.6rem .75rem}
+.img-card>textarea{width:calc(100% - 1.8rem);margin:.5rem .9rem .9rem}
+.img-card .info .actions{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+
+.session-block{border:1px solid var(--line);border-radius:20px;margin-bottom:1rem;overflow:hidden;background:rgba(248,248,250,.7);box-shadow:0 18px 40px -30px rgba(17,17,20,.6)}
+.session-header{display:flex;align-items:center;gap:.9rem;padding:1rem 1.2rem;cursor:pointer;user-select:none;transition:.2s;background:linear-gradient(180deg,var(--navy2),var(--navy));color:#fff}
+.session-header:hover{filter:brightness(1.15)}
+.session-header .s-arrow{font-size:.7rem;color:var(--pill2);transition:.25s;width:14px;text-align:center}
+.session-block.open .s-arrow{transform:rotate(90deg)}
+.session-header .s-title{font:700 .78rem var(--mono);letter-spacing:.14em;text-transform:uppercase;flex:1}
+.session-header .s-meta{font:500 10px var(--mono);color:#a8a8b2;letter-spacing:.08em}
+.session-body{padding:1.1rem;display:none}
+.session-block.open .session-body{display:block}
+
+.pagination{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-top:1.4rem;flex-wrap:wrap}
+.pagination .btn-mini{min-width:96px;padding:.6rem 1rem}
+.pagination .page-info{font:600 11px var(--mono);color:var(--ink2);letter-spacing:.06em}
+
+.filter-bar{display:flex;gap:.6rem;align-items:center;margin-bottom:1.1rem;flex-wrap:wrap}
+.filter-bar .chk{display:inline-flex;align-items:center;gap:.7rem;padding:.55rem 1rem .55rem .7rem;background:#f8f8fa;border:1px solid var(--line);border-radius:99px;font:700 11px var(--mono);letter-spacing:.06em;color:var(--ink2);cursor:pointer;transition:.18s}
+.filter-bar .chk:hover{border-color:var(--gold)}
+
+#historyBox>.sub,#favBox>.sub{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.4rem;margin:0 auto;max-width:44ch;padding:2.4rem 1rem;font:500 12px var(--mono);color:var(--ink3)}
+#historyBox>.sub::before,#favBox>.sub::before{content:"";width:150px;height:150px;margin-bottom:.4rem;filter:drop-shadow(0 20px 24px rgba(17,17,20,.28));background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><defs><radialGradient id='o' cx='.35' cy='.3' r='.85'><stop offset='0' stop-color='%23ffffff'/><stop offset='.38' stop-color='%23c3c3c8'/><stop offset='.78' stop-color='%235d5d68'/><stop offset='1' stop-color='%231d1d24'/></radialGradient></defs><ellipse cx='100' cy='100' rx='92' ry='28' fill='none' stroke='%23e84a8a' stroke-width='3' transform='rotate(-22 100 100)' opacity='.9'/><circle cx='100' cy='100' r='62' fill='url(%23o)'/><ellipse cx='80' cy='72' rx='20' ry='11' fill='%23fff' opacity='.65' transform='rotate(-30 80 72)'/><circle cx='168' cy='66' r='7' fill='%23ff6a2b'/></svg>") center/contain no-repeat}
+
+.style-editor,.sb-editor{position:relative;background:rgba(244,244,246,.88);border:1px solid var(--line);border-radius:20px;padding:1.2rem;margin-bottom:1rem;box-shadow:0 18px 40px -30px rgba(17,17,20,.6)}
+.style-editor h4,.sb-editor h4{display:flex;align-items:center;gap:.6rem;font-size:.95rem;margin-bottom:.6rem;flex-wrap:wrap}
+.style-editor h4 input,.sb-editor h4 input{flex:1;min-width:180px;font-weight:700}
+.style-editor .slug,.sb-editor .slug{font:600 9.5px var(--mono);color:var(--ink3);padding:.25rem .6rem;border-radius:99px;background:var(--bg3);letter-spacing:.08em}
+.style-editor textarea,.sb-editor textarea{min-height:190px;font:500 11.5px/1.65 var(--mono)}
+.sb-editor .items-area{min-height:150px;font-size:12px}
+.style-editor .actions,.sb-editor .actions{display:flex;gap:.5rem;margin-top:.7rem;flex-wrap:wrap;align-items:center}
+
+#apiPanel{position:fixed;bottom:0;left:0;right:0;z-index:40;color:#d4d4d8;background:linear-gradient(180deg,#2a2a30,#111114);border-top:1px solid #3a3a42;box-shadow:0 -18px 44px rgba(17,17,20,.35)}
+#apiPanel::before{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:linear-gradient(90deg,var(--orange),var(--pill),var(--pill2))}
+#apiHead{min-height:50px;padding:.75rem 1.4rem;cursor:pointer;display:flex;align-items:center;gap:.9rem;user-select:none}
+#apiHead:hover{background:rgba(255,255,255,.05)}
+#apiHead .lbl{font:700 .72rem var(--mono);color:#a8a8b2;letter-spacing:.22em}
+#apiPanel #apiSummary{color:#8a8a90!important;font:500 11px var(--mono)!important}
+#apiPanel #apiChevron{color:var(--pill2)!important}
+#apiBody{padding:1.1rem 1.4rem 1.3rem;border-top:1px solid rgba(255,255,255,.1);max-height:55vh;overflow-y:auto;display:none}
+#apiBody.open{display:block}
+#apiBody p{color:#9a9aa0!important;font:500 11.5px var(--mono)!important}
+#apiPanel code{font-family:var(--mono);background:rgba(255,255,255,.1);color:var(--pill2);padding:.1rem .4rem;border-radius:6px}
+#apiPanel textarea{background:#1a1a1e;color:#d4d4d8;border-color:#3a3a42;box-shadow:none}
+#apiPanel textarea:focus{border-color:var(--pill);box-shadow:0 0 0 4px rgba(232,74,138,.2)}
+#apiPanel .status{background:rgba(255,255,255,.06);color:#b8b8be;border-left-color:#5a5a62}
+#apiPanel .status.ok{background:rgba(66,232,164,.12);color:#6cf0bb;border-left-color:#42e8a4}
+#apiPanel .status.err{background:rgba(255,110,100,.14);color:#ff9a92;border-left-color:#ff6e64}
+#apiPanel .btn-slate{background:rgba(255,255,255,.07);border-color:#3a3a42;color:#d4d4d8}
+#apiPanel .btn-slate:hover{border-color:var(--pill2);color:#fff}
+
+#toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-150px);display:flex;align-items:center;gap:.7rem;background:var(--navy);color:#fff;border-radius:99px;padding:.8rem 1.5rem;font:600 .74rem var(--mono);letter-spacing:.03em;z-index:200;opacity:0;transition:.35s cubic-bezier(.2,.9,.3,1.2);max-width:min(600px,92vw);text-align:left;box-shadow:0 22px 50px -12px rgba(17,17,20,.7)}
+#toast::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--pill);flex-shrink:0}
+#toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+#toast.ok::before{background:#42e8a4;box-shadow:0 0 10px #42e8a4}
+#toast.err::before{background:#ff6e64;box-shadow:0 0 10px #ff6e64}
+#toast.info::before{background:var(--pill2)}
+#toast.warn::before{background:var(--orange);box-shadow:0 0 10px var(--orange)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(190,190,196,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:150;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.22s;padding:1rem}
+.modal-overlay.on{opacity:1;pointer-events:auto}
+.modal-box{position:relative;background:#f0f0f2;border:1px solid var(--line);border-radius:28px;padding:1.7rem;max-width:540px;width:100%;box-shadow:0 40px 90px -20px rgba(17,17,20,.55);transform:translateY(14px) scale(.98);transition:.25s;max-height:90vh;overflow-y:auto}
+.modal-overlay.on .modal-box{transform:none}
+.modal-box h3{font:800 1.45rem var(--sans);letter-spacing:-.035em;color:var(--navy);text-transform:uppercase;margin-bottom:.7rem}
+.modal-box p{color:var(--ink2);font-size:.88rem;margin-bottom:.9rem;line-height:1.6}
+.modal-box .modal-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem;flex-wrap:wrap}
+.modal-box .modal-actions .btn{min-width:110px}
+
+#loginBox{width:min(450px,calc(100% - 2rem));margin:15vh 0 3rem clamp(1rem,7vw,7rem)}
+#loginBox h1{font-size:3rem;margin-bottom:.4rem}
+#loginBox .sub{font:500 11px var(--mono);letter-spacing:.04em;margin-bottom:.8rem}
+#loginBox .status{margin-top:.8rem}
+#loginBox .btn-mega{margin-top:1.4rem}
+
+#landing{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#loginBox.hidden + #landing{display:none}
+#landing .l-title{position:absolute;right:3vw;top:11vh;text-align:right;font:900 clamp(5rem,15.5vw,15.5rem)/.8 var(--sans);letter-spacing:-.07em;text-transform:uppercase;color:var(--navy)}
+#landing .l-title span{display:block}
+#landing .l-title span:last-child{color:transparent;-webkit-text-stroke:2px var(--navy)}
+#landing .l-art{position:absolute;right:2vw;bottom:-9vh;height:82vh;aspect-ratio:1}
+#landing .l-art svg{width:100%;height:100%;display:block;filter:drop-shadow(0 40px 50px rgba(17,17,20,.32))}
+#landing .l-meta{position:absolute;left:clamp(1rem,7vw,7rem);bottom:5.5rem;font:500 10px var(--mono);letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;display:flex;gap:1.2rem;flex-wrap:wrap}
+#landing .l-meta b{color:var(--navy)}
+@media(max-width:860px){
+  #loginBox{margin:36vh auto 3rem}
+  #landing .l-title{right:auto;left:1rem;top:9vh;text-align:left;font-size:clamp(4rem,22vw,8rem)}
+  #landing .l-art{right:-12vw;bottom:auto;top:8vh;height:42vh;opacity:.55}
+  #landing .l-meta{display:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gChrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbfdff"/>
+      <stop offset=".26" stop-color="#b3bfcc"/>
+      <stop offset=".48" stop-color="#f1f5f9"/>
+      <stop offset=".72" stop-color="#69758a"/>
+      <stop offset="1" stop-color="#202938"/>
+    </linearGradient>
+    <radialGradient id="gBubble" cx=".35" cy=".28" r=".95">
+      <stop offset="0" stop-color="#f8d6e8"/>
+      <stop offset=".55" stop-color="#e84a8a"/>
+      <stop offset="1" stop-color="#b03a68"/>
+    </radialGradient>
+    <radialGradient id="gOrb" cx=".35" cy=".3" r=".85">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".38" stop-color="#c3c3c8"/>
+      <stop offset=".78" stop-color="#5d5d68"/>
+      <stop offset="1" stop-color="#1d1d24"/>
+    </radialGradient>
+    <linearGradient id="gEye" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8d6e8"/>
+      <stop offset="1" stop-color="#e84a8a"/>
+    </linearGradient>
+    <linearGradient id="gShade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#111114" stop-opacity="0"/>
+      <stop offset="1" stop-color="#111114" stop-opacity=".55"/>
+    </linearGradient>
+    <filter id="fGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3.2"/></filter>
+
+    <symbol id="logo" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="14" fill="none" stroke="#1a1a1e" stroke-width="2"/>
+      <circle cx="16" cy="16" r="9" fill="none" stroke="#e84a8a" stroke-width="1.5" stroke-dasharray="3 2.4"/>
+      <circle cx="16" cy="16" r="4.6" fill="#1a1a1e"/>
+      <circle cx="25.2" cy="8.4" r="2.4" fill="#ff6a2b"/>
+    </symbol>
+
+    <symbol id="orb" viewBox="0 0 200 200">
+      <ellipse cx="100" cy="100" rx="92" ry="28" fill="none" stroke="#e84a8a" stroke-width="3" transform="rotate(-22 100 100)" opacity=".9"/>
+      <circle cx="100" cy="100" r="62" fill="url(#gOrb)"/>
+      <ellipse cx="80" cy="72" rx="20" ry="11" fill="#fff" opacity=".65" transform="rotate(-30 80 72)"/>
+      <path d="M44 112c24 16 62 18 94-4" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/>
+      <circle cx="168" cy="66" r="7" fill="#ff6a2b"/>
+      <circle cx="32" cy="132" r="3.5" fill="#1a1a1e"/>
+    </symbol>
+
+    <symbol id="head" viewBox="0 0 420 420">
+      <circle cx="325" cy="96" r="82" fill="url(#gBubble)"/>
+      <circle cx="325" cy="96" r="68" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 6" stroke-width="1.6"/>
+      <path d="M325 40v112M269 96h112" stroke="#fff" stroke-opacity=".28" stroke-width="1"/>
+      <ellipse cx="300" cy="68" rx="30" ry="14" fill="#fff" opacity=".35" transform="rotate(-24 300 68)"/>
+      <ellipse cx="262" cy="170" rx="150" ry="150" fill="none" stroke="#1a1a1e" stroke-opacity=".16" stroke-dasharray="1 7" stroke-width="2"/>
+      <circle cx="388" cy="196" r="6" fill="#ff6a2b"/>
+      <path d="M252 52C326 52 372 118 362 196C358 232 340 256 334 290L340 420L232 420L236 318C226 296 212 288 196 284C168 278 148 262 144 238L108 230C98 228 96 216 103 209L134 172C134 108 182 52 252 52Z" fill="url(#gChrome)"/>
+      <path d="M300 60C360 92 380 150 362 200C358 232 340 256 334 290L340 420L282 420C318 300 344 214 300 60Z" fill="url(#gShade)"/>
+      <path d="M152 150C162 102 202 62 250 58" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".85"/>
+      <path d="M146 240C176 254 204 250 232 268" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/>
+      <path d="M126 190L178 182C187 181 190 190 183 196L138 208Z" fill="#0b1522"/>
+      <circle cx="158" cy="193" r="9" fill="url(#gEye)" filter="url(#fGlow)"/>
+      <circle cx="158" cy="193" r="4" fill="#f8e8f0"/>
+      <g fill="none" stroke="#585868" stroke-width="1.6" stroke-linecap="round" opacity=".85">
+        <path d="M190 70C218 110 206 142 224 170"/>
+        <path d="M146 240C176 252 206 248 232 264"/>
+        <path d="M300 100C332 130 338 182 322 236"/>
+        <path d="M152 170C170 160 188 158 206 162"/>
+      </g>
+      <g fill="#f0f0f2" stroke="#4a4a52" stroke-width="1"><circle cx="190" cy="70" r="3"/><circle cx="224" cy="170" r="3"/><circle cx="322" cy="236" r="3"/><circle cx="232" cy="264" r="3"/></g>
+      <circle cx="270" cy="172" r="50" fill="#1a1a1e"/>
+      <circle cx="270" cy="172" r="43" fill="none" stroke="url(#gChrome)" stroke-width="5"/>
+      <circle cx="270" cy="172" r="33" fill="none" stroke="#c7c7ce" stroke-width="7" stroke-dasharray="4 5.2"/>
+      <circle cx="270" cy="172" r="23" fill="none" stroke="#6f6f7f" stroke-width="2"/>
+      <circle cx="270" cy="172" r="15" fill="url(#gChrome)"/>
+      <circle cx="270" cy="172" r="5" fill="#0b1522"/>
+      <g fill="none" stroke-linecap="round">
+        <path d="M240 330C272 306 300 346 336 318" stroke="#111118" stroke-width="7"/>
+        <path d="M240 330C272 306 300 346 336 318" stroke="#7d7d8a" stroke-width="1.6" transform="translate(0 -2)"/>
+        <path d="M236 360C276 336 304 380 340 352" stroke="#111118" stroke-width="7"/>
+        <path d="M236 360C276 336 304 380 340 352" stroke="#7d7d8a" stroke-width="1.6" transform="translate(0 -2)"/>
+        <path d="M234 392C270 372 308 408 340 386" stroke="#111118" stroke-width="7"/>
+      </g>
+      <g font-family="JetBrains Mono, monospace" font-size="8.5" letter-spacing="2" fill="#1a1a1e" opacity=".7">
+        <path d="M30 60h74M104 60l10 10h46" stroke="#1a1a1e" stroke-opacity=".6" fill="none"/>
+        <text x="30" y="50">FIG.01 — STREET UNIT</text>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="hud" aria-hidden="true"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><i class="rail"></i><span class="coord">STREET STYLE LAB // V1 · <b>SYS.ONLINE</b></span></div>
+
+<div id="topbar">
+  <div class="brand">
+    <svg aria-hidden="true"><use href="#logo"/></svg>
+    <div><b>Street<i>Style</i></b><small>URBAN FASHION LAB</small></div>
+  </div>
+  <span id="modeTag">NON CONFIGURÉ</span>
+  <span id="globalStat">Ajoutez vos clés API pour commencer</span>
+  <button class="btn-slate btn hidden" id="logoutBtn" style="margin-left:auto">↻ Déconnexion</button>
+</div>
+
+<div id="loginBox" class="card">
+  <div class="card-head"><i></i><b>Accès</b> — Connexion / Inscription</div>
+  <h1>StreetStyle</h1>
+  <p class="sub">Pseudo + PIN 4 chiffres · Connexion / Inscription en 1 étape</p>
+  <label class="lab">Pseudo</label>
+  <input type="text" id="loginUser" placeholder="Votre pseudo" autocomplete="username">
+  <label class="lab">PIN (4 chiffres)</label>
+  <input type="password" id="loginPin" maxlength="4" inputmode="numeric" placeholder="••••" autocomplete="current-password">
+  <button class="btn-mega" id="loginBtn">Se connecter / Créer un compte</button>
+  <div id="loginStatus" class="status" style="margin-top:.6rem"></div>
+</div>
+<div id="landing" aria-hidden="true">
+  <div class="l-title"><span>Street</span><span>Style</span></div>
+  <div class="l-art"><svg viewBox="0 0 420 420"><use href="#head" width="420" height="420"/></svg></div>
+  <div class="l-meta"><span>TXT → IMG</span><span><b>1K · 2K · 3K · 4K</b></span><span>8 RATIOS</span><span>AGNES IA</span></div>
+</div>
+
+<div id="main" class="hidden">
+
+  <header class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">SSL.STUDIO — Édition 01</span>
+      <h1>Street<br>Style <em><span class="chip-people"><span class="av"><i></i><i></i><i></i></span><span>+4K<small>résolution max</small></span></span></em></h1>
+      <p class="sub">Photo + prompt + style → image street style. Agnes IA · txt2img uniquement.</p>
+      <div class="hero-pills"><span class="pill-tag">Txt → Img</span><span class="pill-tag ghost">1K → 4K</span><span class="pill-tag ghost">8 ratios</span><span class="pill-tag ghost">Bulk storyboard</span></div>
+    </div>
+    <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 420 420"><use href="#head" width="420" height="420"/></svg></div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="create">🎨 Créer</button>
+    <button class="tab" data-tab="admin">⚙️ Admin styles</button>
+    <button class="tab" data-tab="bulk">📋 Bulk</button>
+    <button class="tab" data-tab="history">🖼️ Ma bibliothèque</button>
+    <button class="tab" data-tab="favorites">⭐ Favoris</button>
+  </div>
+
+  <section id="tab-create">
+    <div class="card">
+      <div class="card-head"><i></i><b>01</b> — Paramètres de génération</div>
+
+      <label class="lab">Style</label>
+      <select id="styleSelect"></select>
+
+      <label class="lab">Prompt / intention (optionnel)</label>
+      <textarea id="promptInput" placeholder="Décris la scène, l'ambiance, la tenue… (laisse vide si tu fournis juste une photo)"></textarea>
+
+      <div class="chk-row" id="optimizerRow" style="margin-top:.7rem">
+        <input type="checkbox" id="aiOptimizerCheck">
+        <label for="aiOptimizerCheck">✨ IA Optimizer</label>
+        <span class="hint">désactivé = prompt direct, sans appel IA de rédaction</span>
+      </div>
+      <p class="hint-line">Sans optimizer, le prompt utilisateur + le style + chaque élément bulk sont assemblés directement. Avec optimizer, l’IA réécrit chaque prompt, puis l’image démarre immédiatement sans attendre les prompts suivants.</p>
+
+      <label class="lab">Image source (optionnel)</label>
+      <div class="drop" id="imageDrop">
+        <input type="file" id="imageInput" accept="image/*">
+        <div class="icon">📷</div>
+        <div class="txt">Cliquez ou glissez une image</div>
+      </div>
+      <div id="imagePreviewWrap"></div>
+
+      <div class="row" style="margin-top:.4rem">
+        <div>
+          <label class="lab">Taille</label>
+          <select id="sizeSelect">
+            <option value="1K">1K · rapide</option>
+            <option value="2K" selected>2K · équilibré</option>
+            <option value="3K">3K · détaillé</option>
+            <option value="4K">4K · maximum</option>
+          </select>
+        </div>
+        <div>
+          <label class="lab">Ratio</label>
+          <select id="ratioSelect">
+            <option value="1:1">1:1 · carré</option>
+            <option value="3:4">3:4 · portrait</option>
+            <option value="4:3">4:3 · paysage</option>
+            <option value="16:9">16:9 · écran</option>
+            <option value="9:16" selected>9:16 · vertical</option>
+            <option value="2:3">2:3 · portrait photo</option>
+            <option value="3:2">3:2 · photo</option>
+            <option value="21:9">21:9 · cinéma</option>
+          </select>
+        </div>
+      </div>
+      <p class="hint-line">Agnes accepte <b>4 niveaux</b> de taille (1K · 2K · 3K · 4K) et <b>8 ratios</b>.</p>
+
+      <div class="row" style="margin-top:.2rem">
+        <div>
+          <label class="lab">Nombre d'images (par élément bulk)</label>
+          <input type="number" id="countInput" min="1" max="10" value="1" style="min-height:46px">
+        </div>
+        <div>
+          <label class="lab">Concurrence</label>
+          <select id="concurrencySelect">
+            <option value="1">1 (séquentiel)</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="chk-row" id="storyboardRow">
+        <input type="checkbox" id="storyboardCheck">
+        <label for="storyboardCheck">📖 Pack storyboard</label>
+        <span class="hint" id="sbHint">— utiliser la liste active pour multiplier les plans</span>
+      </div>
+
+      <div id="sbSelectWrap" class="hidden" style="margin-top:.7rem">
+        <label class="lab">Storyboard à utiliser</label>
+        <select id="storyboardSelect"></select>
+      </div>
+
+      <button class="btn-mega" id="generateBtn">🎬 Générer</button>
+      <div class="pipeline-ctrl hidden" id="pipelineCtrl">
+        <button class="btn btn-cyan" id="pauseBtn">⏸ Pause</button>
+        <button class="btn btn-red" id="stopBtn">⏹ Stop</button>
+        <button class="btn btn-gold hidden" id="resumeBtn">▶ Reprendre</button>
+      </div>
+    </div>
+
+    <div id="stepsBox" class="hidden" style="margin-top:1rem"></div>
+    <div id="resultsBox" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+        <h2 style="margin:0;border:none;font-size:1.1rem">Résultats</h2>
+        <span class="status" id="resultsCount" style="margin:0;padding:.3rem .7rem">0 / 0</span>
+      </div>
+      <div class="result-grid" id="resultGrid"></div>
+    </div>
+    <div id="emptyCanvas" aria-hidden="true">
+      <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+      <svg viewBox="0 0 200 200"><use href="#orb" width="200" height="200"/></svg>
+      <h3>Canvas vide</h3>
+      <p>Choisissez un style street, écrivez une intention ou déposez une photo, puis lancez la génération.</p>
+    </div>
+  </section>
+
+  <section id="tab-admin" class="hidden">
+    <h2>Mes styles</h2>
+    <p class="sub" style="font-size:.82rem">Éditez vos prompts de style street style. <b>✨ IA améliore</b> réécrit le prompt via Agnes. <b>+ Nouveau style</b> ajoute un style personnalisé.</p>
+    <button class="btn btn-gold" id="addStyleBtn" style="margin-bottom:1rem">+ Nouveau style</button>
+    <div id="styleEditors"></div>
+  </section>
+
+  <section id="tab-bulk" class="hidden">
+    <h2>Listes storyboard (Bulk)</h2>
+    <p class="sub" style="font-size:.82rem">Chaque élément de la liste est une contrainte obligatoire et visible dans l’image. <b>✨ IA améliore</b> nettoie la liste sans ajouter d'objets inventés.</p>
+    <button class="btn btn-gold" id="addSbBtn" style="margin-bottom:1rem">+ Nouvelle liste</button>
+    <div id="sbEditors"></div>
+  </section>
+
+  <section id="tab-history" class="hidden">
+    <h2>Ma bibliothèque</h2>
+    <p class="sub" style="font-size:.82rem">Vos générations par sessions de 3 images visibles. Cliquez sur un bloc de session pour tout voir. Cliquez sur ⭐ pour ajouter aux favoris.</p>
+    <div class="filter-bar">
+      <label class="chk">
+        <input type="checkbox" id="historyFavOnly">
+        <span>⭐ Favoris uniquement</span>
+      </label>
+    </div>
+    <div id="historyBox"></div>
+    <div id="historyPagination" class="pagination hidden"></div>
+  </section>
+
+  <section id="tab-favorites" class="hidden">
+    <h2>⭐ Mes favoris</h2>
+    <p class="sub" style="font-size:.82rem">Toutes les images que vous avez marquées ⭐, les plus récentes en premier.</p>
+    <div id="favBox"></div>
+    <div id="favPagination" class="pagination hidden"></div>
+  </section>
+</div>
+
+<div id="apiPanel">
+  <div id="apiHead">
+    <span class="lbl">🔑 AGNES API</span>
+    <span style="font-size:.7rem;color:var(--ink2);flex:1" id="apiSummary">Cliquez pour configurer</span>
+    <span style="font:700 .7rem ui-monospace;color:var(--gold)" id="apiChevron">▲</span>
+  </div>
+  <div id="apiBody">
+    <p style="font-size:.75rem;color:var(--ink2);margin-bottom:.5rem">Clés Agnes (une par ligne, format <code>sk-…</code>). Stockées dans votre navigateur.</p>
+    <textarea id="apiInput" placeholder="sk-xxx&#10;sk-yyy" style="min-height:90px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+    <div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
+      <button class="btn btn-gold" id="apiValidate">✓ Valider & tester</button>
+      <button class="btn btn-slate" id="apiClear">Effacer</button>
+    </div>
+    <div id="apiStatus" class="status">Aucune clé configurée</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h3 id="modalTitle"></h3>
+    <p id="modalMsg"></p>
+    <div id="modalFieldWrap" class="hidden">
+      <label class="lab" id="modalFieldLabel"></label>
+      <textarea id="modalFieldInput"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-slate" id="modalCancel">Annuler</button>
+      <button class="btn btn-gold" id="modalOk">OK</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   LocalAPI — remplace index.php (PHP + SQLite + cURL)
+   Base locale : IndexedDB · Appels Agnes : fetch direct
+============================================================ */
+const AGNES_BASE = 'https://apihub.agnes-ai.com/v1';
+const AGNES_TEXT_MODEL = 'agnes-3.0-flash';
+const AGNES_TEXT_MODEL_FALLBACK = 'agnes-2.5-flash';
+const AGNES_IMG_MODEL = 'agnes-image-2.5-flash';
+const DEFAULT_STORYBOARD = { slug: 'default_sb', name: 'Storyboard street par défaut',
+  items: ['plan large rue', 'portrait 3/4', 'détail accessoire', 'contre-plongée', 'marche en mouvement', 'assise sur un banc'] };
+const DEFAULT_STYLES = [
+ {
+  slug: "paris_street",
+  name: "Paris — élégance urbaine",
+  prompt: "ROLE: You are a world-class street fashion photographer specialized in Parisian urban elegance.\nTASK: Convert the given scene description into ONE English image prompt (100–140 words).\nPROMPT STRUCTURE: Subject → Scene → Style → Lighting → Composition → Quality.\nALWAYS INCLUDE:\n- Style: candid street photography, 35mm film look, Parisian elegance, natural pose, authentic street feel.\n- Palette: warm neutrals (camel, cream, navy, burgundy), soft Parisian light.\n- Lighting: soft golden-hour or overcast natural light, no harsh flash.\n- Composition: candid framing, environment visible (Haussmann buildings, café terraces, cobblestones), 50mm lens.\n- Subject: real person, natural expression, stylish outfit with Parisian flair.\nCONSTRAINTS:\n- Preserve the SUBJECT of the source description verbatim (identity, pose, clothing). Only restyle.\n- No studio setting, no digital art, no illustration.\n- Return ONLY the prompt. No quotes, no preamble."
+ },
+ {
+  slug: "tokyo_street",
+  name: "Tokyo — Harajuku & Shibuya",
+  prompt: "ROLE: You are a world-class street fashion photographer specialized in Tokyo street style.\nTASK: Convert the given scene description into ONE English image prompt (100–140 words).\nPROMPT STRUCTURE: Subject → Scene → Style → Lighting → Composition → Quality.\nALWAYS INCLUDE:\n- Style: Tokyo street snap, Harajuku / Shibuya / Shimokitazawa aesthetics, bold layering, neon accents, kawaii or techwear influences.\n- Palette: saturated neon (pink, cyan, lime, purple) against urban greys.\n- Lighting: neon signs, vending machine glow, overcast daylight, mixed ambient.\n- Composition: candid street framing, dense urban background, 35mm or 50mm lens.\n- Subject: expressive outfit, natural pose, authentic Harajuku attitude.\nCONSTRAINTS:\n- Preserve the SUBJECT of the source description verbatim. Only restyle.\n- No studio, no digital art, no 3D render.\n- Return ONLY the prompt. No quotes, no preamble."
+ },
+ {
+  slug: "nyc_street",
+  name: "New York — NYC attitude",
+  prompt: "ROLE: You are a world-class street fashion photographer specialized in New York City street style.\nTASK: Convert the given scene description into ONE English image prompt (100–140 words).\nPROMPT STRUCTURE: Subject → Scene → Style → Lighting → Composition → Quality.\nALWAYS INCLUDE:\n- Style: NYC street snap, bold attitude, layered streetwear, urban confidence, SoHo / Brooklyn / Lower East Side vibes.\n- Palette: black, white, denim, bold reds, concrete greys, taxi yellow accents.\n- Lighting: hard midday sun, urban shadows, or moody overcast.\n- Composition: candid framing, city backdrop (brownstones, fire escapes, storefronts), 35mm lens.\n- Subject: confident pose, natural expression, statement outfit.\nCONSTRAINTS:\n- Preserve the SUBJECT of the source description verbatim. Only restyle.\n- No studio, no digital art.\n- Return ONLY the prompt. No quotes, no preamble."
+ },
+ {
+  slug: "london_street",
+  name: "Londres — cool britannia",
+  prompt: "ROLE: You are a world-class street fashion photographer specialized in London street style.\nTASK: Convert the given scene description into ONE English image prompt (100–140 words).\nPROMPT STRUCTURE: Subject → Scene → Style → Lighting → Composition → Quality.\nALWAYS INCLUDE:\n- Style: London street snap, Shoreditch / Camden / Soho vibes, cool Britannia aesthetic, eclectic layering, vintage-meets-modern.\n- Palette: muted earthy tones, tartan accents, black leather, faded denim, pop of red.\n- Lighting: soft overcast London light, wet pavement reflections, or golden hour.\n- Composition: candid framing, London backdrop (brick walls, red phone boxes, double-decker hints), 35mm lens.\n- Subject: relaxed cool attitude, natural pose, eclectic outfit.\nCONSTRAINTS:\n- Preserve the SUBJECT of the source description verbatim. Only restyle.\n- No studio, no digital art.\n- Return ONLY the prompt. No quotes, no preamble."
+ },
+ {
+  slug: "milan_street",
+  name: "Milan — sprezzatura",
+  prompt: "ROLE: You are a world-class street fashion photographer specialized in Milanese street style.\nTASK: Convert the given scene description into ONE English image prompt (100–140 words).\nPROMPT STRUCTURE: Subject → Scene → Style → Lighting → Composition → Quality.\nALWAYS INCLUDE:\n- Style: Milan street snap, sprezzatura elegance, tailored but effortless, Italian fashion week vibes.\n- Palette: warm neutrals (beige, cream, tobacco), navy, olive, burgundy, black leather.\n- Lighting: warm Mediterranean golden hour, soft directional light.\n- Composition: elegant framing, Milan backdrop (Brera cobblestones, Duomo hints, café terraces), 50mm lens.\n- Subject: effortless pose, natural expression, tailored outfit with sprezzatura.\nCONSTRAINTS:\n- Preserve the SUBJECT of the source description verbatim. Only restyle.\n- No studio, no digital art.\n- Return ONLY the prompt. No quotes, no preamble."
+ },
+ {
+  slug: "berlin_street",
+  name: "Berlin — brutalist cool",
+  prompt: "ROLE: You are a world-class street fashion photographer specialized in Berlin street style.\nTASK: Convert the given scene description into ONE English image prompt (100–140 words).\nPROMPT STRUCTURE: Subject → Scene → Style → Lighting → Composition → Quality.\nALWAYS INCLUDE:\n- Style: Berlin street snap, Kreuzberg / Mitte / Neukölln vibes, brutalist cool, techno-adjacent, DIY fashion, all-black utility.\n- Palette: black, concrete grey, acid green, muted neon, raw industrial tones.\n- Lighting: flat overcast or harsh fluorescent street light, raw and unpolished.\n- Composition: candid framing, brutalist architecture backdrop, 35mm lens, gritty atmosphere.\n- Subject: defiant cool attitude, natural pose, utilitarian outfit.\nCONSTRAINTS:\n- Preserve the SUBJECT of the source description verbatim. Only restyle.\n- No studio, no digital art.\n- Return ONLY the prompt. No quotes, no preamble."
+ }
+];
+const SYS = {
+ "vision": "You are a professional visual describer specialized in street fashion photography. Your output will be used to re-generate the SAME scene in a different street style.\nDescribe ONLY what you see, exhaustively and neutrally. Do NOT stylize, do NOT invent.\nStructure your answer with these sections (headings in French, content in French):\n1. PERSONNES — For EACH person: apparent age, face shape, eyes, nose, lips, skin, hair (color/texture/length), body type, posture, expression. Describe clothing item by item with precise colors and materials. Note accessories (bags, shoes, jewelry, hats).\n2. DÉCOR — Location, architecture, urban elements, signage, textures, materials.\n3. ÉCLAIRAGE — Light sources, direction, quality, shadows.\n4. ATMOSPHÈRE — Mood, dominant colors, color palette (give hex approximations if possible).\nRules:\n- If several people are visible, describe each one separately.\n- Do not group people.\n- Be surgical: every detail may be reused verbatim.\n- Length: 180–260 words.",
+ "improveStyle": "You are an expert prompt engineer specialised in ART-STYLE SYSTEM PROMPTS for AI image generation.\nYour job is to IMPROVE A TEMPLATE, not to execute it.\n\nCONTEXT:\nThe input is a SYSTEM PROMPT / TEMPLATE used by a pipeline. This template teaches an AI how to convert ANY user scene into a final image prompt. It is REUSABLE for any subject (portraits, landscapes, objects, animals, architecture, abstract concepts...).\n\nYOUR TASK:\nRewrite the template to make it clearer, more precise, and more effective — while keeping it GENERIC and REUSABLE.\n\nCRITICAL RULES — VIOLATION = FAILURE:\n1. DO NOT execute the template. DO NOT generate a scene. DO NOT invent subjects, characters, landscapes, or objects.\n2. The output MUST remain a reusable TEMPLATE with the same structure (ROLE / TASK / PROMPT STRUCTURE / ALWAYS INCLUDE / CONSTRAINTS or equivalent).\n3. Preserve the original artist / style identity completely. Do NOT change the artist. Do NOT add other artists.\n4. Keep the SAME LANGUAGE as the input (French or English).\n5. You MAY add: precise colour palettes (with hex), technique details, lighting rules, composition rules, quality guards, and a clear instruction to preserve the user's subject verbatim.\n6. Structure the prompt in Agnes-recommended order: Subject → Scene → Style → Lighting → Composition → Quality.\n7. Do NOT add scene-specific words. The template must work whether the user inputs 'a portrait of a woman' or 'a spaceship'.\n8. Output ONLY the rewritten template. No preamble. No explanation. No quotation marks. No markdown fences.",
+ "improveStoryboard": "You are an expert list-generator AI specialized in street fashion photography.\n\nThe user will describe the KIND of list they want. Produce EXACTLY that kind of list.\n\nEXAMPLES:\n- 'liste de cadrages street' → 'plan large rue', 'portrait 3/4', 'détail accessoire', etc.\n- 'liste de villes' → 'Paris', 'Tokyo', 'New York', etc.\n- 'liste de moments' → 'aube', 'matin', 'midi', 'après-midi', 'crépuscule', 'nuit', etc.\n\nRULES:\n- Read the user's request carefully. Do NOT assume it is a storyboard list.\n- Produce items that match EXACTLY what the user asks for.\n- One item per line. No bullets, no numbering, no quotes, no preamble.\n- Each item must be short (max 120 characters), self-contained, usable as-is.\n- Produce between 8 and 40 items.\n- Reply in the SAME LANGUAGE as the user's request.\n- If the user asks for a cross-product (e.g. villes × moments), produce the cross-product as separate lines.\n- Only produce storyboard shot types IF the user explicitly asks for a storyboard.\n\nOUTPUT FORMAT (strict):\nOne item per line. Nothing else."
+};
+  const LocalAPI = (() => {
+  const DB_NAME = 'streetstylelab_db', DB_VER = 1;
+  const SESSION_KEY = 'streetstylelab_session', OFFSET_KEY = 'streetstylelab_key_offset';
+  const E = (msg, status = 500) => Object.assign(new Error(msg), { status });
+  const sleepMs = ms => new Promise(r => setTimeout(r, ms));
+  const nowStr = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const objUrlToId = new Map(), idToObjUrl = new Map();
+  let _db = null;
+
+  function openDB() {
+    if (_db) return Promise.resolve(_db);
+    return new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error('IndexedDB indisponible dans ce navigateur'));
+      const rq = indexedDB.open(DB_NAME, DB_VER);
+      rq.onupgradeneeded = () => {
+        const d = rq.result;
+        const mk = (n, idx) => { const s = d.createObjectStore(n, { keyPath: 'id', autoIncrement: true }); (idx || []).forEach(i => s.createIndex(i, i)); };
+        mk('users', ['username']); mk('styles', ['user_id']); mk('storyboards', ['user_id']);
+        mk('generations', ['user_id']); mk('images');
+        d.createObjectStore('favorites', { keyPath: ['user_id', 'generation_id'] }).createIndex('user_id', 'user_id');
+      };
+      rq.onsuccess = () => { _db = rq.result; res(_db); };
+      rq.onerror = () => rej(rq.error || new Error('IndexedDB : ouverture impossible'));
+      rq.onblocked = () => rej(new Error('IndexedDB bloquée par un autre onglet'));
+    });
+  }
+  const rq2p = r => new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+  async function store(name, mode) { const d = await openDB(); return d.transaction(name, mode || 'readonly').objectStore(name); }
+  async function getAll(name, idx, val) { const s = await store(name); return rq2p(idx ? s.index(idx).getAll(val) : s.getAll()); }
+  async function getOne(name, key) { const s = await store(name); return rq2p(s.get(key)); }
+  async function putRow(name, obj) { const s = await store(name, 'readwrite'); return rq2p(s.put(obj)); }
+  async function delRow(name, key) { const s = await store(name, 'readwrite'); return rq2p(s.delete(key)); }
+
+  function session() { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; } }
+  function needAuth() { const s = session(); if (!s || !s.user_id) throw E('Non authentifié', 401); return s.user_id; }
+
+  async function hashPin(pin, salt) {
+    const data = new TextEncoder().encode(salt + ':' + pin);
+    if (window.crypto && crypto.subtle) {
+      const b = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+    let h = 2166136261; for (const x of data) { h ^= x; h = Math.imul(h, 16777619) >>> 0; }
+    return 'f' + h.toString(16);
+  }
+  function randHex(n) { const a = new Uint8Array(n); crypto.getRandomValues(a); return Array.from(a).map(x => x.toString(16).padStart(2, '0')).join(''); }
+
+  async function ensureUserPresets(uid) {
+    if (!(await getAll('styles', 'user_id', uid)).length) {
+      for (const s of DEFAULT_STYLES) await putRow('styles', { user_id: uid, slug: s.slug, name: s.name, prompt: s.prompt, updated_at: nowStr() });
+    }
+    if (!(await getAll('storyboards', 'user_id', uid)).length) {
+      await putRow('storyboards', { user_id: uid, slug: DEFAULT_STORYBOARD.slug, name: DEFAULT_STORYBOARD.name, items: DEFAULT_STORYBOARD.items.slice(), updated_at: nowStr() });
+    }
+  }
+  const makeSlug = name => (name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '')) + '_' + randHex(2);
+
+  function sanitizeKeys(keys) {
+    const out = [];
+    (Array.isArray(keys) ? keys : []).forEach(k => {
+      if (typeof k !== 'string') return;
+      k = k.trim();
+      if (k.length < 20 || !k.startsWith('sk-')) return;
+      if (!out.includes(k)) out.push(k);
+    });
+    return out;
+  }
+  function keyOffset(n) {
+    if (n <= 0) return 0;
+    let c = 0;
+    try { c = parseInt(localStorage.getItem(OFFSET_KEY) || '0', 10) || 0; localStorage.setItem(OFFSET_KEY, String(c + 1)); } catch (e) {}
+    return c % n;
+  }
+  async function agnesCall(path, payload, apiKey, timeoutSec) {
+    const ctl = new AbortController();
+    const tid = setTimeout(() => ctl.abort(), timeoutSec * 1000);
+    let res, txt;
+    try {
+      res = await fetch(AGNES_BASE + path, {
+        method: 'POST', signal: ctl.signal,
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+        body: JSON.stringify(payload)
+      });
+      txt = await res.text();
+    } catch (e) {
+      throw E(e.name === 'AbortError' ? 'Délai dépassé (' + timeoutSec + 's)' : 'Réseau : ' + e.message, 0);
+    } finally { clearTimeout(tid); }
+    let data = null; try { data = JSON.parse(txt); } catch (e) {}
+    if (res.status >= 400) {
+      const msg = (data && data.error && data.error.message) || txt.slice(0, 250);
+      throw E('Agnes HTTP ' + res.status + ': ' + msg, res.status);
+    }
+    return (data && typeof data === 'object') ? data : {};
+  }
+  async function agnesCallMulti(path, payload, keys, timeout) {
+    const n = keys.length;
+    if (!n) throw E('Aucune clé API disponible');
+    const start = keyOffset(n);
+    const rotated = keys.slice(start).concat(keys.slice(0, start));
+    const models = path.includes('chat/completions') ? [AGNES_TEXT_MODEL, AGNES_TEXT_MODEL_FALLBACK] : [null];
+    let lastErr = null;
+    for (const m of models) for (const key of rotated) for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const p = Object.assign({}, payload); if (m !== null) p.model = m;
+        return await agnesCall(path, p, key, timeout);
+      } catch (e) {
+        lastErr = e;
+        const code = e.status || 0;
+        if (code >= 400 && code < 500 && code !== 429) break;
+        if (attempt === 0) await sleepMs(500);
+      }
+    }
+    throw lastErr || E('Toutes les clés ont échoué');
+  }
+  const chatPayload = (messages, temperature, max_tokens) => ({
+    model: AGNES_TEXT_MODEL, messages, temperature, max_tokens,
+    reasoning_effort: 'none', chat_template_kwargs: { enable_thinking: false }
+  });
+  const stripFences = s => String(s || '').trim().replace(/^```[a-z]*\s*|\s*```$/gi, '');
+
+  async function storeImage(url, uid, label) {
+    let blob = null;
+    if (/^data:image\//i.test(url)) {
+      try { blob = await (await fetch(url)).blob(); } catch (e) { throw E('base64 invalide'); }
+      if (!blob || blob.size < 100) throw E('base64 invalide');
+    } else {
+      if (!/^https?:\/\//i.test(url)) throw E('URL invalide');
+      try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        blob = await r.blob();
+        if (blob.size > 25 * 1024 * 1024 || blob.size < 100) blob = null;
+      } catch (e) { blob = null; }
+      if (!blob) return url;
+    }
+    const id = await putRow('images', { user_id: uid, label: String(label || 'img'), type: blob.type || 'image/png', blob, created_at: nowStr() });
+    const ou = URL.createObjectURL(blob);
+    objUrlToId.set(ou, id); idToObjUrl.set(id, ou);
+    return ou;
+  }
+  async function resolveImage(stored) {
+    const s = String(stored || '');
+    if (!s.startsWith('idb:')) return s;
+    const id = parseInt(s.slice(4), 10);
+    if (idToObjUrl.has(id)) return idToObjUrl.get(id);
+    const row = await getOne('images', id);
+    if (!row || !row.blob) return '';
+    const ou = URL.createObjectURL(row.blob);
+    idToObjUrl.set(id, ou); objUrlToId.set(ou, id);
+    return ou;
+  }
+  const toStoredUrl = u => (objUrlToId.has(u) ? 'idb:' + objUrlToId.get(u) : String(u || ''));
+
+  const A = {
+    async login(b) {
+      const user = String(b.username || '').trim(), pin = String(b.pin || '').trim();
+      if (!/^[a-zA-Z0-9_-]{2,32}$/.test(user)) throw E('Pseudo invalide (2-32 car., a-z 0-9 _ -)', 400);
+      if (!/^\d{4}$/.test(pin)) throw E('PIN : 4 chiffres requis', 400);
+      const row = (await getAll('users', 'username', user))[0];
+      let uid;
+      if (row) {
+        if ((await hashPin(pin, row.salt)) !== row.pin_hash) throw E('PIN incorrect', 403);
+        uid = row.id;
+      } else {
+        const salt = randHex(8);
+        uid = await putRow('users', { username: user, salt, pin_hash: await hashPin(pin, salt), created_at: nowStr() });
+      }
+      await ensureUserPresets(uid);
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ user_id: uid, username: user }));
+      try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+      return { ok: true, user, user_id: uid };
+    },
+    async logout() { localStorage.removeItem(SESSION_KEY); return { ok: true }; },
+    async me() { const s = session(); return { user: s ? s.username : null, user_id: s ? s.user_id : null }; },
+
+    async get_styles() {
+      const uid = needAuth(); await ensureUserPresets(uid);
+      const rows = (await getAll('styles', 'user_id', uid)).sort((a, b) => a.id - b.id);
+      return { ok: true, styles: rows.map(r => ({ id: r.id, slug: r.slug, name: r.name, prompt: r.prompt, updated_at: r.updated_at })) };
+    },
+    async save_style(b) {
+      const uid = needAuth();
+      const id = parseInt(b.id || 0, 10) || 0, name = String(b.name || '').trim(), prompt = String(b.prompt || '').trim();
+      if (!name || !prompt) throw E('name et prompt requis', 400);
+      if (id > 0) {
+        const r = await getOne('styles', id);
+        if (r && r.user_id === uid) { r.name = name; r.prompt = prompt; r.updated_at = nowStr(); await putRow('styles', r); }
+      } else await putRow('styles', { user_id: uid, slug: makeSlug(name), name, prompt, updated_at: nowStr() });
+      return { ok: true };
+    },
+    async delete_style(b) {
+      const uid = needAuth(); const id = parseInt(b.id || 0, 10) || 0;
+      const r = await getOne('styles', id); if (r && r.user_id === uid) await delRow('styles', id);
+      return { ok: true };
+    },
+    async improve_style(b) {
+      needAuth();
+      const current = String(b.prompt || '').trim(), keys = sanitizeKeys(b.keys);
+      if (!current || !keys.length) throw E('prompt et keys requis', 400);
+      const userMsg = "=== TEMPLATE À AMÉLIORER (À RÉÉCRIRE, NE PAS EXÉCUTER) ===\n" + current +
+        "\n=== FIN DU TEMPLATE ===\n\n" +
+        "Réécris CE TEMPLATE en conservant son rôle d'instruction générique.\n" +
+        "NE génère AUCUNE scène. NE choisis AUCUN sujet.\n" +
+        "Retourne uniquement le template amélioré, dans la même langue.";
+      const data = await agnesCallMulti('/chat/completions', chatPayload([{ role: 'system', content: SYS.improveStyle }, { role: 'user', content: userMsg }], 0.4, 1200), keys, 120);
+      const out = stripFences(((data.choices || [])[0] || {}).message && data.choices[0].message.content);
+      if (!out) throw E('Réponse IA vide');
+      return { ok: true, prompt: out.trim() };
+    },
+
+    async get_storyboards() {
+      const uid = needAuth(); await ensureUserPresets(uid);
+      const rows = (await getAll('storyboards', 'user_id', uid)).sort((a, b) => a.id - b.id);
+      return { ok: true, storyboards: rows.map(r => ({ id: r.id, slug: r.slug, name: r.name, items: Array.isArray(r.items) ? r.items : [], updated_at: r.updated_at })) };
+    },
+    async save_storyboard(b) {
+      const uid = needAuth();
+      const id = parseInt(b.id || 0, 10) || 0, name = String(b.name || '').trim();
+      if (!name) throw E('name requis', 400);
+      const items = (Array.isArray(b.items) ? b.items : []).map(x => String(x).trim()).filter(x => x !== '');
+      if (id > 0) {
+        const r = await getOne('storyboards', id);
+        if (r && r.user_id === uid) { r.name = name; r.items = items; r.updated_at = nowStr(); await putRow('storyboards', r); }
+      } else await putRow('storyboards', { user_id: uid, slug: makeSlug(name), name, items, updated_at: nowStr() });
+      return { ok: true };
+    },
+    async delete_storyboard(b) {
+      const uid = needAuth(); const id = parseInt(b.id || 0, 10) || 0;
+      const r = await getOne('storyboards', id); if (r && r.user_id === uid) await delRow('storyboards', id);
+      return { ok: true };
+    },
+    async improve_storyboard(b) {
+      needAuth();
+      const theme = String(b.theme || '').trim(), keys = sanitizeKeys(b.keys);
+      if (!theme || !keys.length) throw E('theme et keys requis', 400);
+      const userMsg = "LISTE OU THÈME À AMÉLIORER :\n" + theme +
+        "\n\nRÈGLES STRICTES :\n" +
+        "- Si l'entrée est déjà une liste, NE PAS ajouter d'objets, de vêtements, de lieux ou de détails concrets.\n" +
+        "- Garde chaque élément GÉNÉRIQUE (type de plan / angle caméra / ville / moment).\n" +
+        "- Corrige l'orthographe, déduplique, et ajoute au maximum 1 ou 2 éléments manquants pertinents.\n" +
+        "- Un élément par ligne. Pas de puces, pas de numéros, pas de guillemets.";
+      const data = await agnesCallMulti('/chat/completions', chatPayload([{ role: 'system', content: SYS.improveStoryboard }, { role: 'user', content: userMsg }], 0.2, 500), keys, 90);
+      const out = stripFences(data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content);
+      const items = [];
+      out.split(/\r\n|\r|\n/).forEach(ln => {
+        ln = ln.trim().replace(/^[\-\*•\d\.\)]+\s*/, '').replace(/^["' \t]+|["' \t]+$/g, '');
+        if (ln !== '' && Array.from(ln).length <= 80) items.push(ln);
+      });
+      if (!items.length) throw E('Réponse IA vide');
+      return { ok: true, items: items.slice(0, 15) };
+    },
+
+    async analyze(b) {
+      needAuth();
+      const image = String(b.image || ''), keys = sanitizeKeys(b.keys);
+      if (!image || !keys.length) throw E('image et keys requis', 400);
+      if (image.length > 18000000) throw E('Image trop volumineuse', 413);
+      const msgs = [{ role: 'system', content: SYS.vision }, { role: 'user', content: [
+        { type: 'text', text: 'Décris cette image.' }, { type: 'image_url', image_url: { url: image } }] }];
+      try {
+        const data = await agnesCallMulti('/chat/completions', chatPayload(msgs, 0.2, 2000), keys, 240);
+        const txt = String((data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '').trim();
+        if (!txt) throw E('Réponse vide');
+        return { ok: true, content: txt };
+      } catch (e) { throw E('Analyse échouée : ' + e.message); }
+    },
+    async generate_prompt(b) {
+      needAuth();
+      const system = String(b.system || '').trim(), userMsg = String(b.user || '').trim(), keys = sanitizeKeys(b.keys);
+      const maxTok = Math.max(80, Math.min(2000, parseInt(b.max_tokens || 500, 10) || 500));
+      let temp = parseFloat(b.temperature); if (isNaN(temp)) temp = 0.75; temp = Math.max(0, Math.min(1.5, temp));
+      if (!system || !userMsg || !keys.length) throw E('system, user et keys requis', 400);
+      try {
+        const data = await agnesCallMulti('/chat/completions', chatPayload([{ role: 'system', content: system }, { role: 'user', content: userMsg }], temp, maxTok), keys, 120);
+        let out = stripFences(data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content);
+        out = out.replace(/^["' \n\r\t]+|["' \n\r\t]+$/g, '');
+        if (!out) throw E('Réponse vide');
+        return { ok: true, content: out };
+      } catch (e) { throw E('Prompt échoué : ' + e.message); }
+    },
+    async generate_image(b) {
+      const uid = needAuth();
+      const prompt = String(b.prompt || '').trim(), keys = sanitizeKeys(b.keys), label = String(b.label || 'img');
+      let size = String(b.size || '2K'), ratio = String(b.ratio || '9:16');
+      if (!prompt || !keys.length) throw E('prompt et keys requis', 400);
+      if (prompt.length > 20000) throw E('Prompt trop long', 413);
+      if (!['1K', '2K', '3K', '4K'].includes(size)) size = '2K';
+      if (!['1:1', '3:4', '4:3', '16:9', '9:16', '2:3', '3:2', '21:9'].includes(ratio)) ratio = '9:16';
+      const payload = { model: AGNES_IMG_MODEL, prompt: Array.from(prompt).slice(0, 5000).join(''), size, ratio, extra_body: { response_format: 'url' } };
+      try {
+        const data = await agnesCallMulti('/images/generations', payload, keys, 240);
+        const d0 = (data.data || [])[0] || {};
+        let url = d0.url || null;
+        if (!url && d0.b64_json) url = 'data:image/png;base64,' + d0.b64_json;
+        if (!url) throw E("Pas d'URL dans la réponse");
+        const local = await storeImage(url, uid, label);
+        return { ok: true, url: local, remote: url };
+      } catch (e) { throw E('Image échouée : ' + e.message); }
+    },
+
+    async log_generation(b) {
+      const uid = needAuth();
+      const id = await putRow('generations', {
+        user_id: uid, style_slug: String(b.style_slug || ''), user_input: String(b.user_input || ''),
+        used_image: parseInt(b.used_image || 0, 10) || 0, vision_desc: String(b.vision_desc || ''),
+        final_prompt: String(b.final_prompt || ''), image_url: toStoredUrl(b.image_url),
+        parent_id: (b.parent_id !== undefined && b.parent_id !== null) ? (parseInt(b.parent_id, 10) || 0) : null,
+        created_at: nowStr()
+      });
+      return { ok: true, id };
+    },
+    async history(b) {
+      const uid = needAuth();
+      const page = Math.max(1, parseInt(b.page || 1, 10) || 1);
+      const perPage = Math.max(1, Math.min(60, parseInt(b.per_page || 30, 10) || 30));
+      const onlyFav = parseInt(b.favorites_only || 0, 10) === 1;
+      const favs = new Set((await getAll('favorites', 'user_id', uid)).map(f => f.generation_id));
+      let rows = (await getAll('generations', 'user_id', uid)).sort((a, b2) => b2.id - a.id);
+      if (onlyFav) rows = rows.filter(r => favs.has(r.id));
+      const total = rows.length, offset = (page - 1) * perPage;
+      const items = [];
+      for (const g of rows.slice(offset, offset + perPage)) items.push({
+        id: g.id, style_slug: g.style_slug, user_input: g.user_input, used_image: g.used_image, final_prompt: g.final_prompt,
+        image_url: await resolveImage(g.image_url), parent_id: g.parent_id, created_at: g.created_at, is_favorite: favs.has(g.id) ? 1 : 0 });
+      return { ok: true, items, total, page, per_page: perPage, favorites_only: onlyFav ? 1 : 0 };
+    },
+    async toggle_favorite(b) {
+      const uid = needAuth(); const gid = parseInt(b.generation_id || 0, 10) || 0;
+      if (gid <= 0) throw E('generation_id requis', 400);
+      const g = await getOne('generations', gid);
+      if (!g || g.user_id !== uid) throw E('Génération introuvable', 404);
+      const ex = await getOne('favorites', [uid, gid]);
+      if (ex) { await delRow('favorites', [uid, gid]); return { ok: true, is_favorite: 0 }; }
+      await putRow('favorites', { user_id: uid, generation_id: gid, created_at: nowStr(), created_ms: Date.now() });
+      return { ok: true, is_favorite: 1 };
+    },
+    async get_favorites(b) {
+      const uid = needAuth();
+      const page = Math.max(1, parseInt(b.page || 1, 10) || 1);
+      const perPage = Math.max(1, Math.min(60, parseInt(b.per_page || 30, 10) || 30));
+      const favs = (await getAll('favorites', 'user_id', uid)).sort((a, b2) => (b2.created_ms || 0) - (a.created_ms || 0));
+      const offset = (page - 1) * perPage, items = [];
+      for (const f of favs.slice(offset, offset + perPage)) {
+        const g = await getOne('generations', f.generation_id);
+        if (!g || g.user_id !== uid) continue;
+        items.push({ id: g.id, style_slug: g.style_slug, user_input: g.user_input, used_image: g.used_image, final_prompt: g.final_prompt,
+          image_url: await resolveImage(g.image_url), parent_id: g.parent_id, created_at: g.created_at, is_favorite: 1 });
+      }
+      return { ok: true, items, total: favs.length, page, per_page: perPage };
+    },
+
+    async test_keys(b) {
+      const keys = sanitizeKeys(b.keys).slice(0, 30);
+      if (!keys.length) throw E('Aucune clé valide', 400);
+      const results = await Promise.all(keys.map(async key => {
+        const ctl = new AbortController(), tid = setTimeout(() => ctl.abort(), 20000);
+        let code = 0;
+        try {
+          const r = await fetch(AGNES_BASE + '/chat/completions', { method: 'POST', signal: ctl.signal,
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({ model: AGNES_TEXT_MODEL, messages: [{ role: 'user', content: 'ok' }], max_tokens: 1 }) });
+          code = r.status;
+        } catch (e) { code = 0; } finally { clearTimeout(tid); }
+        return { key, ok: (code >= 200 && code < 300) || code === 429, status: code };
+      }));
+      return { ok: true, results };
+    }
+  };
+
+  async function handle(action, params, method) {
+    const fn = A[action];
+    if (!fn) throw E('Action inconnue : ' + action, 404);
+    return fn(params || {});
+  }
+  return { handle, isLogged: () => !!session(), username: () => (session() || {}).username || '' };
+})();
+
+window.ARTFORGE = { ajaxUrl: 'local', isLogged: LocalAPI.isLogged(), username: LocalAPI.username() };
+
+</script>
+<script>
+'use strict';
+
+/* ============================================================
+   Street Style Lab — js.js
+   Config lue depuis window.ARTFORGE (défini par LocalAPI)
+============================================================ */
+
+const CFG = {
+  ajaxUrl: (window.ARTFORGE && window.ARTFORGE.ajaxUrl) || 'local',
+  lsKeys:  'streetstylelab_keys_v2',
+  lsFavFilter: 'streetstylelab_fav_filter'
+};
+
+const $  = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+let apiKeys = [];
+let STYLES = [];
+let STORYBOARDS = [];
+let currentImage = null;
+let LOGGED = (window.ARTFORGE && window.ARTFORGE.isLogged) || false;
+let CURRENT_USER = (window.ARTFORGE && window.ARTFORGE.username) || '';
+
+const PIPE = {
+  running: false, paused: false, stopped: false,
+  total: 0, done: 0, failed: 0, active: 0, abort: false,
+};
+
+/* ============================================================
+   UTILS
+============================================================ */
+function toast(msg, type='') {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'on ' + type;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.className = type, 3500);
+}
+
+function compressImage(dataUrl, maxSide=1400) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      let {width:w, height:h} = img;
+      const s = Math.min(1, maxSide / Math.max(w,h));
+      w = Math.round(w*s); h = Math.round(h*s);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      res(c.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => res(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
+/* ============================================================
+   MODAL CUSTOM
+============================================================ */
+function showModal({title, message='', fieldLabel='', fieldValue='', fieldType='textarea', okText='OK', cancelText='Annuler', showCancel=true}) {
+  return new Promise(resolve => {
+    const overlay = $('modalOverlay');
+    $('modalTitle').textContent = title;
+    $('modalMsg').textContent = message;
+    $('modalMsg').style.display = message ? '' : 'none';
+    const fieldWrap = $('modalFieldWrap');
+    const input = $('modalFieldInput');
+    if (fieldLabel) {
+      fieldWrap.classList.remove('hidden');
+      $('modalFieldLabel').textContent = fieldLabel;
+      input.value = fieldValue;
+      if (fieldType === 'text') {
+        input.style.minHeight = '42px';
+        input.style.height = '42px';
+      } else {
+        input.style.minHeight = '88px';
+        input.style.height = '';
+      }
+    } else {
+      fieldWrap.classList.add('hidden');
+      input.value = '';
+    }
+    $('modalOk').textContent = okText;
+    $('modalCancel').textContent = cancelText;
+    $('modalCancel').classList.toggle('hidden', !showCancel);
+    overlay.classList.add('on');
+
+    const close = (val) => {
+      overlay.classList.remove('on');
+      $('modalOk').removeEventListener('click', onOk);
+      $('modalCancel').removeEventListener('click', onCancel);
+      overlay.removeEventListener('click', onOverlay);
+      document.removeEventListener('keydown', onKey);
+      resolve(val);
+    };
+    const onOk = () => close(fieldLabel ? input.value.trim() : true);
+    const onCancel = () => close(null);
+    const onOverlay = e => { if (e.target === overlay) close(null); };
+    const onKey = e => {
+      if (e.key === 'Escape') close(null);
+      if (e.key === 'Enter' && fieldType === 'text' && fieldLabel) { e.preventDefault(); onOk(); }
+    };
+    $('modalOk').addEventListener('click', onOk);
+    $('modalCancel').addEventListener('click', onCancel);
+    overlay.addEventListener('click', onOverlay);
+    document.addEventListener('keydown', onKey);
+    setTimeout(() => input.focus(), 80);
+  });
+}
+
+/* ============================================================
+   BACKEND
+============================================================ */
+const Backend = {
+  async call(action, params = {}, method = 'POST') {
+    try { return await LocalAPI.handle(action, params, method); }
+    catch (e) {
+      if (e && e.status === 401) { location.reload(); throw new Error('Session expirée'); }
+      throw (e instanceof Error ? e : new Error(String(e)));
+    }
+  },
+  login(u, p)            { return this.call('login', {username:u, pin:p}); },
+  logout()               { return this.call('logout', {}); },
+  me()                   { return this.call('me', {}, 'GET'); },
+  getStyles()            { return this.call('get_styles', {}, 'GET'); },
+  saveStyle(id,name,prompt) { return this.call('save_style', {id,name,prompt}); },
+  deleteStyle(id)        { return this.call('delete_style', {id}); },
+  improveStyle(prompt,keys) { return this.call('improve_style', {prompt, keys}); },
+  getStoryboards()       { return this.call('get_storyboards', {}, 'GET'); },
+  saveStoryboard(id,name,items) { return this.call('save_storyboard', {id,name,items}); },
+  deleteStoryboard(id)   { return this.call('delete_storyboard', {id}); },
+  improveStoryboard(theme,keys) { return this.call('improve_storyboard', {theme, keys}); },
+  analyze(image, keys)   { return this.call('analyze', {image, keys}); },
+  generatePrompt(system,user,keys,max=500,temp=0.75) { return this.call('generate_prompt', {system, user, keys, max_tokens:max, temperature:temp}); },
+  generateImage(prompt, keys, label='img', size='2K', ratio='9:16') { return this.call('generate_image', {prompt, keys, label, size, ratio}); },
+  logGeneration(d)       { return this.call('log_generation', d); },
+  history(page=1, perPage=30, favOnly=false) { return this.call('history', {page, per_page: perPage, favorites_only: favOnly ? 1 : 0}, 'GET'); },
+  getFavorites(page=1, perPage=30) { return this.call('get_favorites', {page, per_page: perPage}, 'GET'); },
+  toggleFavorite(genId)  { return this.call('toggle_favorite', {generation_id: genId}); },
+  testKeys(keys)         { return this.call('test_keys', {keys}); }
+};
+
+/* ============================================================
+   AUTH
+============================================================ */
+async function doLogin() {
+  const u = $('loginUser').value.trim();
+  const p = $('loginPin').value.trim();
+  const status = $('loginStatus');
+  if (!u || !/^\d{4}$/.test(p)) {
+    status.className = 'status err';
+    status.textContent = 'Pseudo + PIN 4 chiffres requis';
+    return;
+  }
+  const btn = $('loginBtn');
+  btn.disabled = true; btn.textContent = '⏳ Connexion…';
+  status.className = 'status'; status.textContent = 'Connexion…';
+  try {
+    const r = await Backend.login(u, p);
+    CURRENT_USER = r.user;
+    LOGGED = true;
+    $('loginBox').classList.add('hidden');
+    $('main').classList.remove('hidden');
+    $('logoutBtn').classList.remove('hidden');
+    $('globalStat').innerHTML = 'Connecté : <b>' + esc(CURRENT_USER) + '</b>';
+    await bootApp();
+    toast('Bienvenue ' + CURRENT_USER, 'ok');
+  } catch (e) {
+    status.className = 'status err';
+    status.textContent = '❌ ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Se connecter / Créer un compte';
+  }
+}
+
+async function doLogout() {
+  try { await Backend.logout(); } catch(e) {}
+  location.reload();
+}
+
+/* ============================================================
+   API KEYS
+============================================================ */
+function updateApiTag() {
+  const tag = $('modeTag');
+  const stat = $('globalStat');
+  if (apiKeys.length) {
+    tag.textContent = 'LIVE · ' + apiKeys.length;
+    tag.className = 'mode live';
+    stat.innerHTML = '<b>' + apiKeys.length + '</b> clé(s) prête(s)';
+    $('apiSummary').textContent = apiKeys.length + ' clé(s)';
+  } else {
+    tag.textContent = 'NON CONFIGURÉ';
+    tag.className = 'mode';
+    stat.textContent = 'Ajoutez vos clés API pour commencer';
+    $('apiSummary').textContent = 'Cliquez pour configurer';
+  }
+}
+
+async function validateKeys() {
+  const raw = $('apiInput').value.split('\n').map(l => l.trim()).filter(l => l.startsWith('sk-'));
+  const status = $('apiStatus');
+  if (!raw.length) { status.className='status err'; status.textContent='Aucune clé valide'; return; }
+  status.className = 'status'; status.textContent = '⏳ Test de ' + raw.length + ' clé(s)…';
+  try {
+    const r = await Backend.testKeys(raw);
+    const valid = (r.results || []).filter(x => x.ok).map(x => x.key);
+    if (!valid.length) {
+      status.className = 'status err'; status.textContent = '❌ Aucune clé acceptée';
+      apiKeys = [];
+    } else {
+      apiKeys = valid;
+      try { localStorage.setItem(CFG.lsKeys, JSON.stringify(valid)); } catch(e){}
+      status.className = 'status ok';
+      status.textContent = '✓ ' + valid.length + ' clé(s) validée(s)';
+      toast(valid.length + ' clé(s) validée(s)', 'ok');
+    }
+    updateApiTag();
+  } catch (e) {
+    status.className = 'status err'; status.textContent = '❌ ' + e.message;
+  }
+}
+
+/* ============================================================
+   STYLES
+============================================================ */
+async function loadStyles() {
+  try {
+    const r = await Backend.getStyles();
+    STYLES = r.styles || [];
+    $('styleSelect').innerHTML = STYLES.map(s => `<option value="${esc(s.slug)}">${esc(s.name)}</option>`).join('');
+    renderStyleEditors();
+  } catch (e) { toast('Chargement styles : ' + e.message, 'err'); }
+}
+
+function renderStyleEditors() {
+  const box = $('styleEditors');
+  box.innerHTML = STYLES.map(s => `
+    <div class="style-editor" data-id="${s.id}">
+      <h4>
+        <input type="text" class="style-name" value="${esc(s.name)}" style="min-height:0;padding:.4rem .6rem;font-size:.9rem;font-weight:600">
+        <span class="slug">${esc(s.slug)}</span>
+        <button class="btn-mini btn-red" data-del style="margin-left:auto">🗑</button>
+      </h4>
+      <textarea class="style-prompt">${esc(s.prompt)}</textarea>
+      <div class="actions">
+        <button class="btn-mini" data-save>💾 Sauvegarder</button>
+        <button class="btn-mini" data-improve>✨ IA améliore</button>
+        <span class="status" data-status style="margin:0;padding:.3rem .6rem;font-size:.68rem;display:none"></span>
+      </div>
+    </div>
+  `).join('');
+
+  box.querySelectorAll('.style-editor').forEach(el => {
+    const id = parseInt(el.dataset.id, 10);
+    const nameEl = el.querySelector('.style-name');
+    const promptEl = el.querySelector('.style-prompt');
+    const statusEl = el.querySelector('[data-status]');
+
+    el.querySelector('[data-save]').addEventListener('click', async () => {
+      try {
+        await Backend.saveStyle(id, nameEl.value.trim(), promptEl.value.trim());
+        toast('Style sauvegardé', 'ok');
+        await loadStyles();
+      } catch(e) { toast('Sauvegarde : ' + e.message, 'err'); }
+    });
+
+    el.querySelector('[data-improve]').addEventListener('click', async (ev) => {
+      if (!apiKeys.length) { toast('Configurez vos clés API', 'err'); return; }
+      const btn = ev.currentTarget;
+      btn.disabled = true; btn.textContent = '⏳…';
+      try {
+        const r = await Backend.improveStyle(promptEl.value.trim(), apiKeys);
+        promptEl.value = r.prompt;
+        statusEl.style.display = 'inline-block';
+        statusEl.className = 'status warn';
+        statusEl.textContent = '✨ Amélioré — Sauvegarder';
+      } catch(e) { toast('IA : ' + e.message, 'err'); }
+      finally { btn.disabled = false; btn.textContent = '✨ IA améliore'; }
+    });
+
+    el.querySelector('[data-del]').addEventListener('click', async () => {
+      const ok = await showModal({ title: 'Supprimer ce style ?', message: 'Cette action est irréversible.', okText: 'Supprimer', cancelText: 'Annuler' });
+      if (!ok) return;
+      try {
+        await Backend.deleteStyle(id);
+        toast('Style supprimé', 'ok');
+        await loadStyles();
+      } catch(e) { toast('Suppression : ' + e.message, 'err'); }
+    });
+  });
+}
+
+/* ============================================================
+   STORYBOARDS
+============================================================ */
+async function loadStoryboards() {
+  try {
+    const r = await Backend.getStoryboards();
+    STORYBOARDS = r.storyboards || [];
+    $('storyboardSelect').innerHTML = STORYBOARDS.map(s => `<option value="${esc(s.slug)}">${esc(s.name)} (${(s.items||[]).length})</option>`).join('');
+    renderSbEditors();
+    updateSbHint();
+  } catch (e) { toast('Chargement storyboards : ' + e.message, 'err'); }
+}
+
+function updateSbHint() {
+  const slug = $('storyboardSelect').value;
+  const sb = STORYBOARDS.find(s => s.slug === slug);
+  if (sb) $('sbHint').textContent = (sb.items||[]).length + ' éléments · ' + (sb.name || '');
+  else $('sbHint').textContent = '— aucune liste sélectionnée';
+}
+
+function renderSbEditors() {
+  const box = $('sbEditors');
+  box.innerHTML = STORYBOARDS.map(s => `
+    <div class="sb-editor" data-id="${s.id}">
+      <h4>
+        <input type="text" class="sb-name" value="${esc(s.name)}" style="min-height:0;padding:.4rem .6rem;font-size:.9rem;font-weight:600">
+        <span class="slug">${esc(s.slug)}</span>
+        <button class="btn-mini btn-red" data-del style="margin-left:auto">🗑</button>
+      </h4>
+      <label class="lab" style="margin-top:.3rem">Éléments (un par ligne)</label>
+      <textarea class="items-area sb-items">${esc((s.items||[]).join('\n'))}</textarea>
+      <div class="actions">
+        <button class="btn-mini" data-save>💾 Sauvegarder</button>
+        <button class="btn-mini" data-improve>✨ IA améliore</button>
+        <span class="status" data-status style="margin:0;padding:.3rem .6rem;font-size:.68rem;display:none"></span>
+      </div>
+    </div>
+  `).join('');
+
+  box.querySelectorAll('.sb-editor').forEach(el => {
+    const id = parseInt(el.dataset.id, 10);
+    const nameEl = el.querySelector('.sb-name');
+    const itemsEl = el.querySelector('.sb-items');
+    const statusEl = el.querySelector('[data-status]');
+
+    el.querySelector('[data-save]').addEventListener('click', async () => {
+      const items = itemsEl.value.split('\n').map(l => l.trim()).filter(l => l !== '');
+      try {
+        await Backend.saveStoryboard(id, nameEl.value.trim(), items);
+        toast('Liste sauvegardée', 'ok');
+        await loadStoryboards();
+      } catch(e) { toast('Sauvegarde : ' + e.message, 'err'); }
+    });
+
+    el.querySelector('[data-improve]').addEventListener('click', async (ev) => {
+      if (!apiKeys.length) { toast('Configurez vos clés API', 'err'); return; }
+      const btn = ev.currentTarget;
+      btn.disabled = true; btn.textContent = '⏳…';
+      try {
+        const theme = itemsEl.value.trim() || nameEl.value.trim();
+        const r = await Backend.improveStoryboard(theme, apiKeys);
+        itemsEl.value = (r.items || []).join('\n');
+        statusEl.style.display = 'inline-block';
+        statusEl.className = 'status warn';
+        statusEl.textContent = '✨ Liste générée — Sauvegarder';
+      } catch(e) { toast('IA : ' + e.message, 'err'); }
+      finally { btn.disabled = false; btn.textContent = '✨ IA améliore'; }
+    });
+
+    el.querySelector('[data-del]').addEventListener('click', async () => {
+      const ok = await showModal({ title: 'Supprimer cette liste ?', message: 'Cette action est irréversible.', okText: 'Supprimer', cancelText: 'Annuler' });
+      if (!ok) return;
+      try {
+        await Backend.deleteStoryboard(id);
+        toast('Liste supprimée', 'ok');
+        await loadStoryboards();
+      } catch(e) { toast('Suppression : ' + e.message, 'err'); }
+    });
+  });
+}
+
+/* ============================================================
+   IMAGE UPLOAD
+============================================================ */
+async function handleImage(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const dataUrl = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+  currentImage = await compressImage(dataUrl);
+  renderPreview();
+}
+
+function renderPreview() {
+  const w = $('imagePreviewWrap');
+  if (!currentImage) { w.innerHTML = ''; return; }
+  w.innerHTML = `<div class="preview"><img src="${currentImage}" alt=""><button class="rm" id="rmImage">✕</button></div>`;
+  $('rmImage').addEventListener('click', () => { currentImage = null; renderPreview(); });
+}
+
+/* ============================================================
+   FAVORIS
+============================================================ */
+async function toggleFavorite(genId, btnEl) {
+  if (!genId) { toast('ID image manquant', 'err'); return; }
+  btnEl.disabled = true;
+  try {
+    const r = await Backend.toggleFavorite(genId);
+    if (r.is_favorite) {
+      btnEl.classList.add('active'); btnEl.textContent = '★';
+      toast('Ajouté aux favoris', 'ok');
+    } else {
+      btnEl.classList.remove('active'); btnEl.textContent = '☆';
+      toast('Retiré des favoris', 'info');
+    }
+  } catch (e) { toast('Favori : ' + e.message, 'err'); }
+  finally { btnEl.disabled = false; }
+}
+
+/* ============================================================
+   PIPELINE
+============================================================ */
+function addStep(label, icon) {
+  const box = $('stepsBox');
+  box.classList.remove('hidden');
+  const el = document.createElement('div');
+  el.className = 'step running';
+  el.innerHTML = `<span class="ico">${icon}</span><span class="msg"><span class="spinner"></span> ${esc(label)}</span>`;
+  box.appendChild(el);
+  return el;
+}
+function updateStep(el, msg, ok=true) {
+  el.className = 'step ' + (ok ? 'done' : 'error');
+  el.querySelector('.msg').innerHTML = (ok ? '✓ ' : '❌ ') + esc(msg);
+}
+
+function resetPipelineUI() {
+  $('stepsBox').innerHTML = '';
+  $('stepsBox').classList.add('hidden');
+  $('resultsBox').classList.add('hidden');
+  $('resultGrid').innerHTML = '';
+  $('resultsCount').textContent = '0 / 0';
+  $('pipelineCtrl').classList.add('hidden');
+  $('pauseBtn').classList.remove('hidden');
+  $('resumeBtn').classList.add('hidden');
+  $('stopBtn').disabled = false;
+  $('pauseBtn').disabled = false;
+  PIPE.running = false; PIPE.paused = false; PIPE.stopped = false;
+  PIPE.total = 0; PIPE.done = 0; PIPE.failed = 0; PIPE.active = 0; PIPE.abort = false;
+}
+
+function updateCount() {
+  const el = $('resultsCount');
+  let txt = `${PIPE.done} / ${PIPE.total}`;
+  if (PIPE.failed) txt += ` · ${PIPE.failed} err.`;
+  el.textContent = txt;
+}
+
+async function waitIfPaused() {
+  while (PIPE.paused && !PIPE.stopped) await sleep(200);
+}
+
+async function generateOne(prompt, size, ratio, label) {
+  await waitIfPaused();
+  if (PIPE.stopped) throw new Error('Stopped');
+  PIPE.active++;
+  try { return (await Backend.generateImage(prompt, apiKeys, label, size, ratio)).url; }
+  finally { PIPE.active--; }
+}
+
+function createImageCard(data) {
+  const card = document.createElement('div');
+  card.className = 'img-card';
+  card._data = data;
+  const isFav = parseInt(data.is_favorite || 0, 10) === 1;
+  const canFavNow = !!data.genId;
+  card.innerHTML = `
+    <button class="fav-btn ${isFav ? 'active' : ''}" data-fav title="Favori" ${canFavNow ? '' : 'disabled'}>${isFav ? '★' : '☆'}</button>
+    <div class="img-wrap"><img src="${esc(data.url)}" alt="" loading="lazy" class="new"></div>
+    <div class="info">
+      <div class="meta">${esc(data.style || '')} · #${(data.index||0) + 1}</div>
+      <textarea class="prompt-edit">${esc(data.prompt)}</textarea>
+      <div class="actions">
+        <button class="btn-mini" data-copy>📋 Copier</button>
+        <button class="btn-mini" data-regen>↻ Régénérer</button>
+        <span class="status" data-msg style="display:none;margin:0;padding:.25rem .5rem;font-size:.65rem"></span>
+      </div>
+    </div>`;
+
+  const ta = card.querySelector('.prompt-edit');
+  const msg = card.querySelector('[data-msg]');
+  const favBtn = card.querySelector('[data-fav]');
+
+  favBtn.addEventListener('click', () => {
+    if (!data.genId) { toast('Image en cours de sauvegarde, patientez…', 'info'); return; }
+    toggleFavorite(data.genId, favBtn);
+  });
+  card.querySelector('[data-copy]').addEventListener('click', () => {
+    navigator.clipboard.writeText(ta.value).then(() => toast('Prompt copié', 'ok')).catch(() => toast('Copie impossible', 'err'));
+  });
+  card.querySelector('[data-regen]').addEventListener('click', async (ev) => {
+    const btn = ev.currentTarget;
+    if (btn.disabled) return;
+    if (!apiKeys.length) { toast('Configurez vos clés API', 'err'); return; }
+    btn.disabled = true;
+    msg.style.display = 'inline-block';
+    msg.className = 'status';
+    msg.innerHTML = '<span class="spinner"></span> Régénération…';
+    const prompt = ta.value.trim();
+    if (!prompt) { toast('Prompt vide', 'err'); btn.disabled = false; return; }
+    const size = $('sizeSelect').value;
+    const ratio = $('ratioSelect').value;
+    try {
+      const r = await Backend.generateImage(prompt, apiKeys, 'regen_' + Date.now(), size, ratio);
+      const imgWrap = card.querySelector('.img-wrap');
+      imgWrap.querySelectorAll('img').forEach(im => { im.classList.remove('new'); im.classList.add('old'); });
+      const newImg = document.createElement('img');
+      newImg.src = r.url; newImg.className = 'new'; newImg.loading = 'lazy'; newImg.alt = 'regenerated';
+      imgWrap.appendChild(newImg);
+      msg.className = 'status ok'; msg.textContent = '✓ Nouvelle image';
+      toast('Image régénérée', 'ok');
+      try {
+        const lr = await Backend.logGeneration({
+          style_slug: data.style, user_input: '', used_image: 0, vision_desc: '',
+          final_prompt: prompt, image_url: r.url, parent_id: data.genId || data.parentId || null,
+        });
+        if (lr && lr.id) { data.genId = lr.id; data.parentId = lr.id; favBtn.disabled = false; favBtn.classList.remove('active'); favBtn.textContent = '☆'; }
+      } catch (e) { console.warn('logGeneration régén échoué :', e); }
+    } catch (e) {
+      msg.className = 'status err'; msg.textContent = '❌ ' + e.message;
+    } finally { btn.disabled = false; }
+  });
+
+  return card;
+}
+
+function composeDirectPrompt({stylePrompt, userPrompt, visionDesc, bulkItem, variantIndex}) {
+  const parts = [];
+  parts.push('PRIMARY VISUAL STYLE — APPLY THROUGHOUT THE ENTIRE IMAGE:\n' + stylePrompt.trim());
+  if (userPrompt) parts.push('EXACT USER INTENT / SUBJECT — PRESERVE IT:\n' + userPrompt.trim());
+  if (visionDesc) parts.push('SOURCE IMAGE VISUAL DESCRIPTION — USE AS SUBJECT REFERENCE, NOT AS A REQUEST TO COPY TEXT:\n' + visionDesc.trim());
+  if (bulkItem) parts.push('MANDATORY BULK / STORYBOARD ELEMENT — THIS MUST BE CLEARLY VISIBLE AND DOMINANT IN THIS IMAGE:\n' + bulkItem.trim() + '\nDo not omit, dilute, replace, or merely allude to this element. Make it explicit in the subject, action, framing, and scene where relevant.');
+  if (variantIndex > 0) parts.push('VARIATION ' + (variantIndex + 1) + ': keep the same subject, style, palette and mandatory storyboard element; vary only secondary composition details.');
+  parts.push('STYLE PRIORITY: the named style rules above govern the whole image, including subject rendering, materials, costume, architecture, color palette, lighting, camera, composition and background. Do not fall back to a generic aesthetic.');
+  parts.push('IMAGE QUALITY: coherent composition, precise details, intentional lighting, no text, no watermark.');
+  return parts.filter(Boolean).join('\n\n');
+}
+
+function buildOptimizerRequest({stylePrompt, userPrompt, visionDesc, bulkItem, variantIndex}) {
+  const chunks = [];
+  chunks.push('STYLE PROMPT — HIGHEST PRIORITY; preserve and apply every distinctive rule:\n' + stylePrompt.trim());
+  if (userPrompt) chunks.push('USER SUBJECT / INTENT — do not replace it:\n' + userPrompt.trim());
+  if (visionDesc) chunks.push('IMAGE-TO-TEXT SOURCE ANALYSIS — preserve the recognizable subject and important visual attributes:\n' + visionDesc.trim());
+  if (bulkItem) chunks.push('MANDATORY BULK ITEM — MUST BE EXPLICITLY REPRESENTED, not treated as optional inspiration:\n' + bulkItem.trim());
+  if (variantIndex > 0) chunks.push('Variation number ' + (variantIndex + 1) + ': preserve style, subject and mandatory bulk item; vary only secondary details.');
+  chunks.push('Write one complete English image-generation prompt. Integrate the style throughout the entire prompt, not as a weak suffix. Preserve the user subject. The bulk item is a hard constraint and must be unmistakably visible. Include concrete subject, scene, materials, palette, lighting, camera/framing and composition. Resolve conflicts in this order: user subject, mandatory bulk item, distinctive style rules, secondary embellishment. Do not explain your work; return only the final prompt.');
+  return chunks.join('\n\n');
+}
+
+async function generate() {
+  const styleSlug = $('styleSelect').value;
+  const style = STYLES.find(s => s.slug === styleSlug);
+  const userPrompt = $('promptInput').value.trim();
+  const hasImage = !!currentImage;
+  const optimizeWithAI = !!$('aiOptimizerCheck')?.checked;
+  if (!style) { toast('Style invalide', 'err'); return; }
+  if (!apiKeys.length) { toast('Configurez vos clés API', 'err'); return; }
+  if (!hasImage && !userPrompt) { toast('Fournissez une image OU un prompt', 'err'); return; }
+
+  const size = $('sizeSelect').value;
+  const ratio = $('ratioSelect').value;
+  const countPerElement = Math.max(1, Math.min(10, parseInt($('countInput').value || '1', 10)));
+  const concurrency = Math.max(1, Math.min(10, parseInt($('concurrencySelect').value || '2', 10)));
+  const useStoryboard = $('storyboardCheck').checked;
+
+  let sbItems = [];
+  if (useStoryboard) {
+    const sbSlug = $('storyboardSelect').value;
+    const sb = STORYBOARDS.find(s => s.slug === sbSlug);
+    if (!sb || !(sb.items || []).length) { toast('Storyboard vide ou introuvable', 'err'); return; }
+    sbItems = sb.items.map(x => String(x).trim()).filter(Boolean);
+    if (!sbItems.length) { toast('La liste bulk ne contient aucun élément exploitable.', 'err'); return; }
+  } else { sbItems = ['']; }
+
+  const totalImages = countPerElement * sbItems.length;
+  resetPipelineUI();
+  PIPE.running = true;
+  PIPE.total = totalImages;
+  $('generateBtn').disabled = true;
+  $('generateBtn').textContent = optimizeWithAI ? '⏳ Optimisation + images…' : '⏳ Génération directe…';
+  $('pipelineCtrl').classList.remove('hidden');
+  $('resultsBox').classList.remove('hidden');
+  updateCount();
+
+  const grid = $('resultGrid');
+  const queue = [];
+  let producerDone = false;
+  let nextImageIndex = 0;
+  let visionDesc = '';
+  let promptCount = 0;
+
+  const imageWorkers = Array.from({length: concurrency}, async () => {
+    while (true) {
+      await waitIfPaused();
+      if (PIPE.stopped || PIPE.abort) return;
+      if (!queue.length) {
+        if (producerDone) return;
+        await sleep(100);
+        continue;
+      }
+      const t = queue.shift();
+      if (!t) continue;
+      try {
+        const label = 'ssl_' + (t.styleSlug || 'x') + '_' + t.index + (t.sbItem ? '_' + t.sbItem.slice(0, 18).replace(/[^a-z0-9_-]/gi, '_') : '');
+        const url = await generateOne(t.promptFinal, size, ratio, label);
+        PIPE.done++;
+        updateCount();
+        const card = createImageCard({
+          prompt: t.promptFinal, url,
+          style: t.sbItem ? (t.styleSlug + ' · ' + t.sbItem) : t.styleSlug,
+          index: t.index, parentId: null, genId: null, is_favorite: 0,
+        });
+        grid.appendChild(card);
+        Backend.logGeneration({
+          style_slug: t.styleSlug, user_input: t.userPrompt, used_image: t.hasImage ? 1 : 0,
+          vision_desc: t.visionDesc, final_prompt: t.promptFinal, image_url: url, parent_id: null,
+        }).then(r => {
+          if (r && r.id) {
+            card._data.genId = r.id;
+            const favBtn = card.querySelector('[data-fav]');
+            if (favBtn) favBtn.disabled = false;
+          }
+        }).catch(e => {
+          console.warn('logGeneration échoué :', e);
+          const favBtn = card.querySelector('[data-fav]');
+          if (favBtn) favBtn.disabled = false;
+        });
+      } catch (e) {
+        PIPE.failed++;
+        updateCount();
+        const errCard = document.createElement('div');
+        errCard.className = 'img-card';
+        errCard.innerHTML = `<div class="img-wrap"><div style="padding:1rem;color:var(--red);font-size:.8rem">❌ ${esc(e.message)}</div></div><div class="meta">${esc(t.sbItem || 'Génération directe')}</div><textarea class="prompt-edit" readonly>${esc(t.promptFinal)}</textarea>`;
+        grid.appendChild(errCard);
+      }
+    }
+  });
+
+  try {
+    if (hasImage) {
+      const s = addStep('Analyse de l’image source → texte…', '🔍');
+      try {
+        const r = await Backend.analyze(currentImage, apiKeys);
+        visionDesc = String(r.content || '').trim();
+        if (!visionDesc) throw new Error('L’analyse n’a renvoyé aucune description.');
+        updateStep(s, 'Analyse terminée (' + visionDesc.length + ' caractères).');
+      } catch (e) { updateStep(s, 'Analyse échouée : ' + e.message, false); throw e; }
+    }
+
+    const producerStep = addStep(
+      optimizeWithAI ? 'Optimisation des prompts puis lancement immédiat des images…' : 'Construction directe des prompts puis lancement immédiat des images…',
+      '✍️'
+    );
+
+    for (let itemIndex = 0; itemIndex < sbItems.length; itemIndex++) {
+      await waitIfPaused();
+      if (PIPE.stopped || PIPE.abort) break;
+      const item = sbItems[itemIndex];
+      for (let variant = 0; variant < countPerElement; variant++) {
+        await waitIfPaused();
+        if (PIPE.stopped || PIPE.abort) break;
+        let finalPrompt;
+        if (optimizeWithAI) {
+          const userMsg = buildOptimizerRequest({ stylePrompt: style.prompt, userPrompt, visionDesc, bulkItem: item, variantIndex: variant });
+          const r = await Backend.generatePrompt(
+            'You are an expert image-prompt engineer. Follow all user constraints literally. The style and mandatory bulk item must be strongly visible in the final image prompt. Return only the final English prompt.',
+            userMsg, apiKeys, 900, item ? 0.35 : 0.55
+          );
+          finalPrompt = String(r.content || '').trim();
+          if (!finalPrompt) throw new Error('L’optimiseur IA a renvoyé un prompt vide.');
+        } else {
+          finalPrompt = composeDirectPrompt({ stylePrompt: style.prompt, userPrompt, visionDesc, bulkItem: item, variantIndex: variant });
+        }
+        promptCount++;
+        const idx = nextImageIndex++;
+        queue.push({ index: idx, promptFinal: finalPrompt, sbItem: item, styleSlug, userPrompt, hasImage, visionDesc });
+        updateStep(producerStep, `${promptCount}/${totalImages} prompt(s) prêt(s) — ${PIPE.done} image(s) terminée(s).`);
+      }
+    }
+    updateStep(producerStep, `${promptCount} prompt(s) créé(s). Les images déjà lancées continuent.`, true);
+  } catch (e) {
+    toast('Erreur : ' + e.message, 'err');
+  } finally {
+    producerDone = true;
+  }
+
+  await Promise.all(imageWorkers);
+  updateCount();
+  PIPE.running = false;
+  $('generateBtn').disabled = false;
+  $('generateBtn').textContent = '🎬 Générer';
+  $('pauseBtn').classList.add('hidden');
+  $('resumeBtn').classList.add('hidden');
+  $('stopBtn').disabled = true;
+  if (PIPE.stopped) toast('Génération arrêtée. Les images déjà terminées sont conservées.', 'info');
+  else if (!PIPE.failed) toast(`Terminé : ${PIPE.done}/${PIPE.total} image(s) générée(s).`, 'ok');
+  else toast(`Terminé : ${PIPE.done} réussie(s), ${PIPE.failed} échec(s).`, 'warn');
+}
+
+function bindPipelineControls() {
+  $('pauseBtn').addEventListener('click', () => {
+    PIPE.paused = true;
+    $('pauseBtn').classList.add('hidden');
+    $('resumeBtn').classList.remove('hidden');
+    toast('En pause — les tâches en cours continuent', 'info');
+  });
+  $('resumeBtn').addEventListener('click', () => {
+    PIPE.paused = false;
+    $('resumeBtn').classList.add('hidden');
+    $('pauseBtn').classList.remove('hidden');
+    toast('Reprise…', 'info');
+  });
+  $('stopBtn').addEventListener('click', () => {
+    PIPE.stopped = true;
+    $('stopBtn').disabled = true;
+    toast('Arrêt demandé', 'info');
+  });
+}
+
+/* ============================================================
+   HISTORIQUE
+============================================================ */
+let HIST_STATE = { page: 1, perPage: 30, total: 0, items: [], favOnly: false };
+
+async function loadHistory(page = 1) {
+  const box = $('historyBox');
+  const pag = $('historyPagination');
+  const favOnly = $('historyFavOnly').checked;
+  box.innerHTML = '<p class="sub">⏳ Chargement…</p>';
+  pag.classList.add('hidden');
+  try {
+    const r = await Backend.history(page, 30, favOnly);
+    const items = r.items || [];
+    HIST_STATE = { page: r.page || page, perPage: r.per_page || 30, total: r.total || 0, items, favOnly };
+    if (!items.length) {
+      box.innerHTML = '<p class="sub">' + (favOnly ? 'Aucun favori pour le moment.' : 'Aucune génération pour le moment.') + '</p>';
+      return;
+    }
+    const sessionGroups = [];
+    for (let i = 0; i < items.length; i += 30) sessionGroups.push(items.slice(i, i + 30));
+
+    box.innerHTML = sessionGroups.map((group, si) => {
+      const startId = group[group.length - 1]?.id ?? 0;
+      const endId = group[0]?.id ?? 0;
+      const visible = group.slice(0, 3);
+      const hidden = group.slice(3);
+      return `
+      <div class="session-block" data-session="${si}">
+        <div class="session-header">
+          <span class="s-arrow">▶</span>
+          <span class="s-title">Session ${si + 1} · ${group.length} image(s)</span>
+          <span class="s-meta">ids ${startId}–${endId}</span>
+        </div>
+        <div class="session-body">
+          <div class="result-grid">${visible.map((it, idx) => renderHistoryCard(it, si, idx)).join('')}</div>
+          ${hidden.length ? `<div class="result-grid" data-hidden-session="${si}" style="display:none;margin-top:1rem">${hidden.map((it, idx) => renderHistoryCard(it, si, idx + 3)).join('')}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    box.querySelectorAll('.session-block').forEach(block => {
+      const header = block.querySelector('.session-header');
+      header.addEventListener('click', () => {
+        block.classList.toggle('open');
+        if (block.classList.contains('open')) {
+          const hiddenBox = block.querySelector('[data-hidden-session]');
+          if (hiddenBox) hiddenBox.style.display = '';
+        }
+      });
+    });
+
+    bindHistoryCards(box);
+
+    const totalPages = Math.max(1, Math.ceil(HIST_STATE.total / HIST_STATE.perPage));
+    if (totalPages > 1) {
+      pag.classList.remove('hidden');
+      pag.innerHTML = `
+        <button class="btn-mini" data-page="${Math.max(1, page-1)}" ${page<=1?'disabled':''}>← Précédent</button>
+        <span class="page-info">Page ${page} / ${totalPages} · ${HIST_STATE.total} image(s)</span>
+        <button class="btn-mini" data-page="${Math.min(totalPages, page+1)}" ${page>=totalPages?'disabled':''}>Suivant →</button>
+      `;
+      pag.querySelectorAll('[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = parseInt(btn.dataset.page, 10);
+          if (p && p !== page) loadHistory(p);
+        });
+      });
+    }
+  } catch(e) {
+    box.innerHTML = '<p class="sub">Erreur : ' + esc(e.message) + '</p>';
+  }
+}
+
+function renderHistoryCard(it) {
+  const isFav = parseInt(it.is_favorite || 0, 10) === 1;
+  return `
+    <div class="img-card history-card" data-id="${it.id}" data-url="${esc(it.image_url)}" data-style="${esc(it.style_slug||'')}">
+      <button class="fav-btn ${isFav ? 'active' : ''}" data-fav title="Favori">${isFav ? '★' : '☆'}</button>
+      <div class="img-wrap"><img src="${esc(it.image_url)}" alt="" loading="lazy" style="border:2px solid var(--green)"></div>
+      <div class="info">
+        <div class="meta">${esc(it.style_slug||'')} · ${esc(it.created_at)}</div>
+        <textarea class="prompt-edit">${esc(it.final_prompt)}</textarea>
+        <div class="actions">
+          <button class="btn-mini" data-copy>📋 Copier</button>
+          <button class="btn-mini" data-regen>↻ Régénérer</button>
+          <span class="status" data-msg style="display:none;margin:0;padding:.25rem .5rem;font-size:.65rem"></span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function bindHistoryCards(box) {
+  box.querySelectorAll('.history-card').forEach(card => {
+    const ta = card.querySelector('.prompt-edit');
+    const msg = card.querySelector('[data-msg]');
+    const styleSlug = card.dataset.style || '';
+    const parentId = parseInt(card.dataset.id, 10) || null;
+    const favBtn = card.querySelector('[data-fav]');
+    if (favBtn) favBtn.addEventListener('click', () => toggleFavorite(parentId, favBtn));
+    const copyBtn = card.querySelector('[data-copy]');
+    if (copyBtn) copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(ta.value).then(() => toast('Prompt copié', 'ok')).catch(() => toast('Copie impossible', 'err'));
+    });
+    const regenBtn = card.querySelector('[data-regen]');
+    if (regenBtn) regenBtn.addEventListener('click', async (ev) => {
+      if (!apiKeys.length) { toast('Configurez vos clés API', 'err'); return; }
+      const btn = ev.currentTarget;
+      if (btn.disabled) return;
+      btn.disabled = true;
+      msg.style.display = 'inline-block';
+      msg.className = 'status';
+      msg.innerHTML = '<span class="spinner"></span> Régénération…';
+      const prompt = ta.value.trim();
+      if (!prompt) { toast('Prompt vide', 'err'); btn.disabled = false; return; }
+      const size = $('sizeSelect').value;
+      const ratio = $('ratioSelect').value;
+      try {
+        const url = await Backend.generateImage(prompt, apiKeys, 'regen_hist_' + Date.now(), size, ratio);
+        const imgWrap = card.querySelector('.img-wrap');
+        imgWrap.querySelectorAll('img').forEach(im => { im.classList.remove('new'); im.classList.add('old'); });
+        const newImg = document.createElement('img');
+        newImg.src = url.url; newImg.className = 'new'; newImg.loading = 'lazy'; newImg.alt = 'regenerated';
+        imgWrap.appendChild(newImg);
+        msg.className = 'status ok'; msg.textContent = '✓ Nouvelle image';
+        toast('Image régénérée', 'ok');
+        Backend.logGeneration({ style_slug: styleSlug, user_input: '', used_image: 0, vision_desc: '', final_prompt: prompt, image_url: url.url, parent_id: parentId }).catch(() => {});
+      } catch (e) {
+        msg.className = 'status err'; msg.textContent = '❌ ' + e.message;
+      } finally { btn.disabled = false; }
+    });
+  });
+}
+
+/* ============================================================
+   FAVORIS (onglet dédié)
+============================================================ */
+let FAV_STATE = { page: 1, perPage: 30, total: 0, items: [] };
+
+async function loadFavorites(page = 1) {
+  const box = $('favBox');
+  const pag = $('favPagination');
+  box.innerHTML = '<p class="sub">⏳ Chargement…</p>';
+  pag.classList.add('hidden');
+  try {
+    const r = await Backend.getFavorites(page, 30);
+    const items = r.items || [];
+    FAV_STATE = { page: r.page || page, perPage: r.per_page || 30, total: r.total || 0, items };
+    if (!items.length) {
+      box.innerHTML = '<p class="sub">Aucun favori pour le moment. Cliquez sur ⭐ sur une image pour l\'ajouter ici.</p>';
+      return;
+    }
+    box.innerHTML = '<div class="result-grid">' + items.map(it => renderHistoryCard(it)).join('') + '</div>';
+    bindHistoryCards(box);
+    const totalPages = Math.max(1, Math.ceil(FAV_STATE.total / FAV_STATE.perPage));
+    if (totalPages > 1) {
+      pag.classList.remove('hidden');
+      pag.innerHTML = `
+        <button class="btn-mini" data-page="${Math.max(1, page-1)}" ${page<=1?'disabled':''}>← Précédent</button>
+        <span class="page-info">Page ${page} / ${totalPages} · ${FAV_STATE.total} favori(s)</span>
+        <button class="btn-mini" data-page="${Math.min(totalPages, page+1)}" ${page>=totalPages?'disabled':''}>Suivant →</button>
+      `;
+      pag.querySelectorAll('[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = parseInt(btn.dataset.page, 10);
+          if (p && p !== page) loadFavorites(p);
+        });
+      });
+    }
+  } catch(e) { box.innerHTML = '<p class="sub">Erreur : ' + esc(e.message) + '</p>'; }
+}
+
+/* ============================================================
+   TABS
+============================================================ */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  ['create','admin','bulk','history','favorites'].forEach(id => {
+    const el = $('tab-' + id);
+    if (el) el.classList.toggle('hidden', id !== name);
+  });
+  if (name === 'history') loadHistory(1);
+  if (name === 'bulk') loadStoryboards();
+  if (name === 'favorites') loadFavorites(1);
+}
+
+/* ============================================================
+   BOOT
+============================================================ */
+async function bootApp() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CFG.lsKeys) || '[]');
+    if (saved.length) {
+      apiKeys = saved;
+      $('apiInput').value = saved.join('\n');
+      $('apiStatus').className = 'status ok';
+      $('apiStatus').textContent = '✓ ' + saved.length + ' clé(s) restaurée(s)';
+    }
+  } catch(e){}
+  updateApiTag();
+  try {
+    if (localStorage.getItem(CFG.lsFavFilter) === '1') $('historyFavOnly').checked = true;
+  } catch(e){}
+  await loadStyles();
+  await loadStoryboards();
+  bindPipelineControls();
+}
+
+/* ============================================================
+   BIND
+============================================================ */
+function bind() {
+  $('loginBtn').addEventListener('click', doLogin);
+  $('loginPin').addEventListener('keypress', e => { if (e.key === 'Enter') doLogin(); });
+  $('logoutBtn').addEventListener('click', doLogout);
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => switchTab(t.dataset.tab));
+  });
+
+  $('imageInput').addEventListener('change', async (e) => {
+    const f = e.target.files[0];
+    if (f) await handleImage(f);
+    e.target.value = '';
+  });
+  const drop = $('imageDrop');
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = 'var(--gold)'; }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.style.borderColor = ''; }));
+  drop.addEventListener('drop', async (e) => {
+    const f = e.dataTransfer.files[0];
+    if (f) await handleImage(f);
+  });
+
+  $('generateBtn').addEventListener('click', generate);
+
+  $('addStyleBtn').addEventListener('click', async () => {
+    const name = await showModal({ title: 'Nouveau style', message: 'Donnez un nom à votre style.', fieldLabel: 'Nom du style', fieldValue: '', fieldType: 'text', okText: 'Suivant' });
+    if (!name) return;
+    const promptTxt = await showModal({ title: 'Prompt système', message: 'Décrivez la consigne de style (rôle, règles, palette…).', fieldLabel: 'Prompt du style', fieldValue: '', fieldType: 'textarea', okText: 'Créer' });
+    if (!promptTxt) return;
+    try {
+      await Backend.saveStyle(0, name.trim(), promptTxt.trim());
+      toast('Style ajouté', 'ok');
+      await loadStyles();
+    } catch(e) { toast('Ajout : ' + e.message, 'err'); }
+  });
+
+  $('addSbBtn').addEventListener('click', async () => {
+    const name = await showModal({ title: 'Nouvelle liste storyboard', message: 'Donnez un nom à votre liste.', fieldLabel: 'Nom de la liste', fieldValue: '', fieldType: 'text', okText: 'Créer' });
+    if (!name) return;
+    try {
+      await Backend.saveStoryboard(0, name.trim(), ['plan large rue', 'portrait 3/4', 'détail accessoire']);
+      toast('Liste ajoutée', 'ok');
+      await loadStoryboards();
+    } catch(e) { toast('Ajout : ' + e.message, 'err'); }
+  });
+
+  $('apiHead').addEventListener('click', () => {
+    $('apiBody').classList.toggle('open');
+    $('apiChevron').textContent = $('apiBody').classList.contains('open') ? '▼' : '▲';
+  });
+  $('apiValidate').addEventListener('click', validateKeys);
+  $('apiClear').addEventListener('click', () => {
+    $('apiInput').value = '';
+    apiKeys = [];
+    try { localStorage.removeItem(CFG.lsKeys); } catch(e){}
+    $('apiStatus').className = 'status';
+    $('apiStatus').textContent = 'Aucune clé configurée';
+    updateApiTag();
+  });
+
+  $('storyboardCheck').addEventListener('change', () => {
+    $('sbSelectWrap').classList.toggle('hidden', !$('storyboardCheck').checked);
+    updateSbHint();
+  });
+  $('storyboardSelect').addEventListener('change', updateSbHint);
+
+  $('historyFavOnly').addEventListener('change', () => {
+    try { localStorage.setItem(CFG.lsFavFilter, $('historyFavOnly').checked ? '1' : '0'); } catch(e){}
+    loadHistory(1);
+  });
+
+  if (LOGGED) {
+    $('loginBox').classList.add('hidden');
+    $('main').classList.remove('hidden');
+    $('logoutBtn').classList.remove('hidden');
+    $('globalStat').innerHTML = 'Connecté : <b>' + esc(CURRENT_USER) + '</b>';
+    bootApp();
+  } else {
+    $('main').classList.add('hidden');
+  }
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+else bind();
+
+</script>
+
+</body>
+</html>
+
+  
+// ... [Suite du LocalAPI — identique à ton code, non tronqué ci-dessous]
